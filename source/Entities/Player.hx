@@ -4,8 +4,8 @@ import flixel.FlxObject;
 
 class Player extends Entity
 {
-	public var HSpeed : Float = 70;
-	public var JumpSpeed : Float = 130;
+	public var HSpeed : Float = 60;
+	public var JumpSpeed : Float = 180;
 
 	public var onAir : Bool;
 
@@ -13,7 +13,12 @@ class Player extends Entity
 	{
 		super(X, Y, World);
 
-		makeGraphic(12, 12, 0xFF3BEB6F);
+		loadGraphic("assets/images/melon_sheet.png", true, 16, 16);
+		animation.add("idle", [0]);
+		animation.add("walk", [4, 5, 6, 7], 6, true);
+		animation.add("jump", [8]);
+
+		flipX = false;
 
 		onAir = false;
 	}
@@ -27,21 +32,45 @@ class Player extends Entity
 		if (GamePad.checkButton(GamePad.Left))
 		{
 			velocity.x = -HSpeed;
+			facing = FlxObject.LEFT;
 		}
 		else if (GamePad.checkButton(GamePad.Right))
 		{
 			velocity.x = HSpeed;
+			facing = FlxObject.RIGHT;
 		}
 		else
 			velocity.x = 0;
 
-		if (!onAir && velocity.y == 0)
+		if (!onAir)
 		{
-			if (GamePad.justPressed(GamePad.A))
+			if (velocity.y == 0 && GamePad.justPressed(GamePad.A))
 				velocity.y = -JumpSpeed;
+		}
+		else
+		{
+			if (GamePad.justReleased(GamePad.A) && velocity.y < 0)
+				velocity.y = 0;
 		}
 
 		super.update();
+	}
+
+	override public function draw()
+	{
+		if (onAir)
+			animation.play("jump");
+		else
+		{
+			if (velocity.x == 0)
+				animation.play("idle");
+			else
+				animation.play("walk");
+		}
+
+		flipX = (facing == FlxObject.LEFT);
+
+		super.draw();
 	}
 
 	public function onCollisionWithEnemy(enemy : Enemy)
