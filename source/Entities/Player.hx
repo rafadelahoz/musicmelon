@@ -50,7 +50,7 @@ class Player extends Entity
 		else
 		{
 			if (GamePad.justReleased(GamePad.A) && velocity.y < 0)
-				velocity.y = 0;
+				velocity.y /= 2;
 		}
 
 		super.update();

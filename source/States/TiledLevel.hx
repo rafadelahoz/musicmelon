@@ -113,6 +113,12 @@ class TiledLevel extends TiledMap
 			case "start":
 				addPlayer(x, y, state);
 		
+			case "oneway":
+				var oneway : FlxObject = new FlxObject(x, y, o.width, o.height);
+				oneway.allowCollisions = FlxObject.UP;
+				oneway.immovable = true;
+				state.oneways.add(oneway);
+		
 		/** Collectibles **/
 		
 		/** Elements **/

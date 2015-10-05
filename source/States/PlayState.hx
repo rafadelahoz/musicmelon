@@ -33,6 +33,7 @@ class PlayState extends GameState
 	/* Entities lists */
 	public var player : Player;
 	public var level : TiledLevel;
+	public var oneways : FlxGroup;
 	public var enemies : FlxGroup;
 	public var collectibles : FlxTypedGroup<Collectible>;
 	public var decoration : FlxTypedGroup<Decoration>;
@@ -63,6 +64,7 @@ class PlayState extends GameState
 		entities = new FlxTypedGroup<Entity>();
 
 		player  = null;
+		oneways = new FlxGroup();
 		enemies = new FlxGroup();
 		collectibles = new FlxTypedGroup<Collectible>();
 		decoration = new FlxTypedGroup<Decoration>();
@@ -78,9 +80,11 @@ class PlayState extends GameState
 		// Load level objects
 		level.loadObjects(this);
 
+		// if (player == null)
 		add(player = new Player(FlxG.width / 2, FlxG.height / 2, this));
-
+		
 		add(entities);
+		add(oneways);
 		
 		handlePlayerPosition();
 		
@@ -109,6 +113,9 @@ class PlayState extends GameState
 		level.destroy();
 		level = null;
 		
+		oneways.destroy();
+		oneways = null;
+		
 		enemies.destroy();
 		enemies = null;
 		
@@ -136,6 +143,9 @@ class PlayState extends GameState
 
 		// Player vs World
 		level.collideWithLevel(player);
+		
+		// Player vs One way solids
+		FlxG.collide(oneways, player);
 		
 		// Player vs Collectibles
 		FlxG.overlap(collectibles, player, onCollectibleCollision);
