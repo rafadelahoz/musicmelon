@@ -16,113 +16,122 @@ import flixel.util.FlxPoint;
 
 class TiledLevel extends TiledMap
 {
-	private inline static var spritesPath = "assets/images/";
-	private inline static var tilesetPath = "assets/tilesets/";
+    private inline static var spritesPath = "assets/images/";
+    private inline static var tilesetPath = "assets/tilesets/";
 
-	public var overlayTiles    : FlxGroup;
-	public var foregroundTiles : FlxGroup;
-	public var backgroundTiles : FlxGroup;
-	public var collidableTileLayers : Array<FlxTilemap>;
-	
-	public var meltingsPerSecond : Float;
+    public var overlayTiles : FlxGroup;
+    public var foregroundTiles : FlxGroup;
+    public var backgroundTiles : FlxGroup;
+    public var collidableTileLayers : Array<FlxTilemap>;
 
-	public function new(tiledLevel : Dynamic)
-	{
-		super(tiledLevel);
+    public var meltingsPerSecond : Float;
 
-		overlayTiles = new FlxGroup();
-		foregroundTiles = new FlxGroup();
-		backgroundTiles = new FlxGroup();
-		collidableTileLayers = new Array<FlxTilemap>();
+    public function new( tiledLevel : Dynamic )
+    {
+        super( tiledLevel );
 
-		FlxG.camera.setBounds(0, 0, fullWidth, fullHeight, true);
+        overlayTiles = new FlxGroup();
+        foregroundTiles = new FlxGroup();
+        backgroundTiles = new FlxGroup();
+        collidableTileLayers = new Array<FlxTilemap>();
 
-		/* Read config info */
-		
-		/* Read tile info */
-		for (tileLayer in layers)
-		{
-			var tilesetName : String = tileLayer.properties.get("tileset");
-			if (tilesetName == null)
-				throw "'tileset' property not defined for the " + tileLayer.name + " layer. Please, add the property to the layer.";
+        FlxG.camera.setBounds( 0, 0, fullWidth, fullHeight, true );
 
-			// Locate the tileset
-			var tileset : TiledTileSet = null;
-			for (ts in tilesets) {
-				if (ts.name == tilesetName) 
-				{
-					tileset = ts;
-					break;
-				}
-			}
+        /* Read config info */
 
-			// trace(tilesetName);
+        /* Read tile info */
+        for ( tileLayer in layers )
+        {
+            var tilesetName : String = tileLayer.properties.get( "tileset" );
+            if ( tilesetName == null )
+                throw "'tileset' property not defined for the " + tileLayer.name + " layer. Please, add the property to the layer.";
 
-			if (tileset == null)
-				throw "Tileset " + tilesetName + " could not be found. Check the name in the layer 'tileset' property or something.";
+            // Locate the tileset
+            var tileset : TiledTileSet = null;
+            for ( ts in tilesets )
+            {
+                if ( ts.name == tilesetName )
+                {
+                    tileset = ts;
+                    break;
+                }
+            }
 
-			var processedPath = buildPath(tileset);
+            // trace(tilesetName);
 
-			var tilemap : FlxTilemap = new FlxTilemap();
-			tilemap.widthInTiles = width;
-			tilemap.heightInTiles = height;
-			tilemap.loadMap(tileLayer.tileArray, processedPath, tileset.tileWidth, tileset.tileHeight, 0, 1, 1, 1);
-			
-			if (tileLayer.properties.contains("overlay"))
-			{
-				overlayTiles.add(tilemap);
-			}
-			else if (tileLayer.properties.contains("solid")) 
-			{
-				collidableTileLayers.push(tilemap);
-			}
-			else
-			{
-				backgroundTiles.add(tilemap);
-			}
-		}
-	}
+            if ( tileset == null )
+                throw "Tileset " + tilesetName + " could not be found. Check the name in the layer 'tileset' property or something.";
 
-	public function loadObjects(state : PlayState) : Void
-	{
-		for (group in objectGroups)
-		{
-			for (o in group.objects)
-			{
-				loadObject(o, group, state);
-			}
-		}
+            var processedPath = buildPath( tileset );
 
-		if (state.player == null)
-			addPlayer(64, 64, state);
+            var tilemap : FlxTilemap = new FlxTilemap();
+            tilemap.widthInTiles = width;
+            tilemap.heightInTiles = height;
+            tilemap.loadMap( tileLayer.tileArray, processedPath, tileset.tileWidth, tileset.tileHeight, 0, 1, 1, 1 );
 
-	}
+            if ( tileLayer.properties.contains( "overlay" ) )
+            {
+                overlayTiles.add( tilemap );
+            }
+            else if ( tileLayer.properties.contains( "solid" ) )
+            {
+                collidableTileLayers.push( tilemap );
+            }
+            else
+            {
+                backgroundTiles.add( tilemap );
+            }
+        }
+    }
 
-	private function loadObject(o : TiledObject, g : TiledObjectGroup, state : PlayState) : Void
-	{
-		var x : Int = o.x;
-		var y : Int = o.y;
+    public function loadObjects( state : PlayState ) : Void
+    {
+        for ( group in objectGroups )
+        {
+            for ( o in group.objects )
+            {
+                loadObject( o, group, state );
+            }
+        }
 
-		// The Y position of objects created from tiles must be corrected by the object height
-		if (o.gid != -1) {
-			y -= o.height;
-		}
+        if ( state.player == null )
+            addPlayer( 64, 64, state );
 
-		switch (o.type.toLowerCase()) 
-		{
-			case "start":
-				addPlayer(x, y, state);
-		
-			case "oneway":
-				var oneway : FlxObject = new FlxObject(x, y, o.width, o.height);
-				oneway.allowCollisions = FlxObject.UP;
-				oneway.immovable = true;
-				state.oneways.add(oneway);
-		
-		/** Collectibles **/
-		
-		/** Elements **/
-		/*	case "decoration":
+    }
+
+    private function loadObject( o : TiledObject, g : TiledObjectGroup, state : PlayState ) : Void
+    {
+        var x : Int = o.x;
+        var y : Int = o.y;
+
+        // The Y position of objects created from tiles must be corrected by the object height
+        if ( o.gid != -1 )
+        {
+            y -= o.height;
+        }
+
+        switch (o.type.toLowerCase( ))
+        {
+            case "start":
+                addPlayer( x, y, state );
+
+            case "oneway":
+                var oneway : FlxObject = new FlxObject(x, y, o.width, o.height);
+                oneway.allowCollisions = FlxObject.UP;
+                oneway.immovable = true;
+                state.oneways.add( oneway );
+
+            case "collectible":
+                switch (o.name.toLowerCase( ))
+                {
+                    case "musicnote":
+                        var musicnote : MusicNote = new MusicNote(x, y, state);
+                        state.collectibles.add(musicnote);
+                }
+            /** Collectibles **/
+
+            /** Elements **/
+            /*	case "decoration":
 				var gid = o.gid;
 				var tiledImage : TiledImage = getImageSource(gid);
 				if (tiledImage == null)
@@ -134,9 +143,9 @@ class TiledLevel extends TiledMap
 					var decoration : Decoration = new Decoration(x, y, state, tiledImage);
 					state.decoration.add(decoration);
 				}*/
-				
-		/** Enemies **/
-			/*case "runner":
+
+            /** Enemies **/
+            /*case "runner":
 				var jumper : Bool = o.custom.contains("jumper");
 				var runner : EnemyRunner = new EnemyRunner(x, y, state, jumper);
 				initEnemy(runner, o);
@@ -147,68 +156,68 @@ class TiledLevel extends TiledMap
 				initEnemy(walker, o);
 				walker.hazardType = hazardType;
 				state.addEnemy(walker);*/
-		}
-	}
-	
-	function getImageSource(gid : Int) : TiledImage
-	{
-		var image : TiledImage = imageCollection.get(gid);
-		image.imagePath = "assets/tilesets/detail/" + image.sourceImage;
-		return image;
-	}
-	
-	public function initEnemy(e : Enemy, o : TiledObject) : Void
-	{
-		var variation : Int = getVariation(o);
+        }
+    }
 
-		// e.init(variation);
-	}
-	
-	public function getVariation(o : TiledObject) : Int
-	{
-		var worldTypeStr : String = o.custom.get("variation");
-		if (worldTypeStr != null)
-			return Std.parseInt(worldTypeStr);
-		else
-			return 0;
-	}
+    function getImageSource( gid : Int ) : TiledImage
+    {
+        var image : TiledImage = imageCollection.get( gid );
+        image.imagePath = "assets/tilesets/detail/" + image.sourceImage;
+        return image;
+    }
 
-	public function addPlayer(x : Int, y : Int, state : PlayState) : Void
-	{
-		var player : Player = new Player(x, y, state);
+    public function initEnemy( e : Enemy, o : TiledObject ) : Void
+    {
+        var variation : Int = getVariation( o );
 
-		state.addPlayer(player);
-	}
+        // e.init(variation);
+    }
 
-	public function collideWithLevel(obj : FlxObject, ?notifyCallback : FlxObject -> FlxObject -> Void, ?processCallback : FlxObject -> FlxObject -> Bool) : Bool
-	{
-		if (collidableTileLayers != null)
-		{
-			for (map in collidableTileLayers) 
-			{
-				// Remember: Collide the map with the objects, not the other way around!
-				return FlxG.overlap(map, obj, notifyCallback, processCallback != null ? processCallback : FlxObject.separate);
-			}
-		}
+    public function getVariation( o : TiledObject ) : Int
+    {
+        var worldTypeStr : String = o.custom.get( "variation" );
+        if ( worldTypeStr != null )
+            return Std.parseInt( worldTypeStr );
+        else
+            return 0;
+    }
 
-		return false;
-	}
-	
-	private function buildPath(tileset : TiledTileSet, ?spritesCase : Bool  = false) : String
-	{
-		var imagePath = new Path(tileset.imageSource);
-		var processedPath = (spritesCase ? spritesPath : tilesetPath) + 
-			imagePath.file + "." + imagePath.ext;
+    public function addPlayer( x : Int, y : Int, state : PlayState ) : Void
+    {
+        var player : Player = new Player(x, y, state);
 
-		return processedPath;
-	}
+        state.addPlayer( player );
+    }
 
-	public function destroy() 
-	{
-		backgroundTiles.destroy();
-		foregroundTiles.destroy();
-		overlayTiles.destroy();
-		for (layer in collidableTileLayers)
-			layer.destroy();
-	}
+    public function collideWithLevel( obj : FlxObject, ?notifyCallback : FlxObject -> FlxObject -> Void, ?processCallback : FlxObject -> FlxObject -> Bool ) : Bool
+    {
+        if ( collidableTileLayers != null )
+        {
+            for ( map in collidableTileLayers )
+            {
+                // Remember: Collide the map with the objects, not the other way around!
+                return FlxG.overlap( map, obj, notifyCallback, processCallback != null ? processCallback : FlxObject.separate );
+            }
+        }
+
+        return false;
+    }
+
+    private function buildPath( tileset : TiledTileSet, ?spritesCase : Bool = false ) : String
+    {
+        var imagePath = new Path(tileset.imageSource);
+        var processedPath = (spritesCase ? spritesPath : tilesetPath) +
+                            imagePath.file + "." + imagePath.ext;
+
+        return processedPath;
+    }
+
+    public function destroy( )
+    {
+        backgroundTiles.destroy( );
+        foregroundTiles.destroy( );
+        overlayTiles.destroy( );
+        for ( layer in collidableTileLayers )
+            layer.destroy( );
+    }
 }

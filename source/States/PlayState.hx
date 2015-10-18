@@ -85,6 +85,7 @@ class PlayState extends GameState
 		
 		add(entities);
 		add(oneways);
+		add(collectibles);
 		
 		handlePlayerPosition();
 		
