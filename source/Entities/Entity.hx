@@ -2,6 +2,9 @@ package;
 
 import flixel.FlxSprite;
 
+/**
+ * Parent to elements living in the PlayState
+ **/
 class Entity extends FlxSprite
 {
 	var world : PlayState;
