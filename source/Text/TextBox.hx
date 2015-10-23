@@ -13,7 +13,7 @@ import flixel.tweens.FlxTween;
 import openfl.Assets;
 
 /**
- * @author Simon Zeni (Bl4ckb0ne)
+ * @author Rafa de la Hoz over code by Simon Zeni (Bl4ckb0ne)
  */
 
 class TextBox extends FlxGroup
