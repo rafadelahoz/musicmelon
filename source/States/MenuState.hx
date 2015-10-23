@@ -13,7 +13,8 @@ import flixel.system.scaleModes.PixelPerfectScaleMode;
 import text.PixelText;
 
 /**
- * A FlxState which can be used for the game's menu.
+ * The Main Menu State displays the title screen, and maybe some cute
+ * animation and the obvious Press Start message
  */
 class MenuState extends GameState
 {

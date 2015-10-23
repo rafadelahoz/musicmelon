@@ -4,4 +4,4 @@ export/
 *.sublime-workspace
 /.idea
 /*.iml
-/*.sublime-project
+*.sublime-project

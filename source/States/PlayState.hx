@@ -20,7 +20,8 @@ import text.TextBox;
 using flixel.util.FlxSpriteUtil;
 
 /**
- * A FlxState which can be used for the actual gameplay.
+ * GamePlay game state. Contains the player, the level, the enemies
+ * and every other game play related entity.
  */
 class PlayState extends GameState
 {
@@ -41,6 +42,9 @@ class PlayState extends GameState
 	// General entities list for pausing
 	public var entities : FlxTypedGroup<Entity>;
 
+	/**
+	 * Builds a new PlayState which will load the map file specified by name
+	 */
 	public function new(?Level : String)
 	{
 		super();
