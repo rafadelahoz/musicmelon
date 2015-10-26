@@ -125,7 +125,16 @@ class TiledLevel extends TiledMap
                 switch (o.name.toLowerCase( ))
                 {
                     case "musicnote":
-                        var musicnote : MusicNote = new MusicNote(x, y, state);
+                        // We create a variable to contain the file name
+                        var file : String;
+                        // We either get the file name from the map or assign it a default ound
+                        if (o.custom.contains("file"))
+                            file = o.custom.get("file");
+                        else
+                            file = "default.wav";
+
+                        // We create the musical note with the object data and add it to the map
+                        var musicnote : MusicNote = new MusicNote(x, y, state, file);
                         state.collectibles.add(musicnote);
                 }
             /** Collectibles **/

@@ -17,7 +17,7 @@ class MusicNote extends Collectible
     **/
     private var _sound : FlxSound;
 
-    public function new( X : Float, Y : Float, World : PlayState )
+    public function new( X : Float, Y : Float, World : PlayState, File : String )
     {
         super( X, Y, World );
 
@@ -25,10 +25,8 @@ class MusicNote extends Collectible
         loadGraphic( "assets/images/musicnote_sheet.png", true, 16, 16 );
 
         // We create a new sound from a wav file
-        //TODO this is for now hardcoded to one sound, it should be defined
-        //TODO according to the level the player is playing in.
         //TODO Is this multiplatform?
-        _sound = FlxG.sound.load( "assets/sounds/notemalesigh.wav" );
+        _sound = FlxG.sound.load( "assets/sounds/" + File );
 
         //We add an iddle animation to the note based on its graphic
         animation.add( "idle", [0] );
@@ -39,7 +37,7 @@ class MusicNote extends Collectible
     **/
     override public function onCollected( ) : Void
     {
-        //TODO It is not playing o.o
+        //TODO It is not playing on surface o.o
         _sound.play( true );
         super.onCollected( );
     }
