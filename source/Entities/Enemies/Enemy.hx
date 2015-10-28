@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxObject;
+import flixel.util.FlxPoint;
 
 /**
  * The Enemy class will be the base class for advanced enemies,
@@ -31,7 +32,7 @@ class Enemy extends Entity
 	 * @param FPS			Frames-per-second for the enemy animation
 	 * @param FacePlayer	Whether the enemy shall always face the player or not
 	 */
-	public function init(Width : Int, Height : Int, ?Sprite : String = null, ?FPS : Int = -1, ?FacePlayer : Bool = false)
+	public function init(Width : Int, Height : Int, ?Sprite : String = null, ?Mask : FlxPoint, ?FPS : Int = -1, ?FacePlayer : Bool = false)
 	{
 		// If no sprite is specified, just make a placeholder rectangle
 		if (Sprite == null)
@@ -48,6 +49,13 @@ class Enemy extends Entity
 				
 			// Load the specified spritesheet with the given width and height
 			loadGraphic("assets/images/" + Sprite + ".png", true, Width, Height);
+
+			if (Mask != null)
+			{
+				setSize(Mask.x, Mask.y);
+				centerOffsets(true);
+			}
+
 			// Add the animation with the appropriate fps
 			animation.add("idle", [0, 1], fps);
 			// And play it

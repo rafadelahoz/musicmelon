@@ -161,6 +161,14 @@ class TiledLevel extends TiledMap
 				case "enemy":
 					// Fetch properties
 					var sprite : String = o.custom.get("sprite");
+                    var maskStr : String = o.custom.get("mask");
+                    var mask : FlxPoint = null;
+                    if (maskStr != null)
+                    {
+                        var maskComps : Array<String> = maskStr.split(",");
+                        mask = FlxPoint.get(Std.parseInt(maskComps[0]), Std.parseInt(maskComps[1]));
+                    }
+
 					var faceplayer : Bool = o.custom.contains("faceplayer");
 					var fps : Int = Enemy.DefaultFPS;
 					if (o.custom.contains("fps"))
@@ -171,7 +179,7 @@ class TiledLevel extends TiledMap
 					// Instantiate the enemy
 					var enemy : Enemy = new Enemy(x, y, state);
 					// Initialize it with the read properties
-					enemy.init(o.width, o.height, sprite, fps, faceplayer);
+					enemy.init(o.width, o.height, sprite, mask, fps, faceplayer);
 					// And add it to the world
 					state.enemies.add(enemy);
         }
