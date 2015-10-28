@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="8" tileheight="8" nextobjectid="6">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="8" tileheight="8" nextobjectid="12">
  <tileset firstgid="1" name="tileset_a" tilewidth="8" tileheight="8" tilecount="900">
   <image source="../tilesets/tileset_a.png" trans="ff00ff" width="240" height="240"/>
+  <tile id="0">
+   <properties>
+    <property name="sprite" value="enemy_test_sheet"/>
+   </properties>
+  </tile>
  </tileset>
  <layer name="Background" width="40" height="30">
   <properties>
@@ -44,6 +49,27 @@
    <properties>
     <property name="file" value="notemalesigh.wav"/>
    </properties>
+  </object>
+  <object id="6" name="bubble 1" type="enemy" x="48" y="112" width="16" height="16">
+   <properties>
+    <property name="fps" value="2"/>
+    <property name="sprite" value="enemy_bubble_sheet"/>
+   </properties>
+  </object>
+  <object id="7" name="shabby slime" type="enemy" x="88" y="128" width="16" height="16">
+   <properties>
+    <property name="faceplayer" value="true"/>
+    <property name="fps" value="8"/>
+    <property name="sprite" value="enemy_test_sheet"/>
+   </properties>
+  </object>
+  <object id="8" name="bubble 2" type="enemy" x="288" y="112" width="16" height="16">
+   <properties>
+    <property name="sprite" value="enemy_bubble_sheet"/>
+   </properties>
+  </object>
+  <object id="11" type="start" x="112" y="128" width="16" height="16">
+   <ellipse/>
   </object>
  </objectgroup>
 </map>

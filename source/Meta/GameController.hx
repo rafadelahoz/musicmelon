@@ -20,4 +20,9 @@ class GameController
 	{
 		FlxG.switchState(new PlayState(GameStatus.currentLevel));
 	}
+	
+	public static function OnDeath()
+	{
+		FlxG.switchState(new DeathState());
+	}
 }

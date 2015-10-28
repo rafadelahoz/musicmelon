@@ -9,7 +9,7 @@ class Player extends Entity
 {
 	/* Constants */
 	public var HSpeed : Float = 60;
-	public var JumpSpeed : Float = 180;
+	public var JumpSpeed : Float = 185;
 
 	/* State variables */
 	// Whether the player is on air or on ground
@@ -24,6 +24,9 @@ class Player extends Entity
 		animation.add("walk", [4, 5, 6, 7], 6, true);
 		animation.add("jump", [8]);
 
+		setSize(12, 12);
+		offset.set(2, 4);
+		
 		flipX = false;
 
 		onAir = false;

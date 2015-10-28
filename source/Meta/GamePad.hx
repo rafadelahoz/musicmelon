@@ -19,7 +19,7 @@ class GamePad
 	
 	public static function setupVirtualPad() : Void
 	{	
-			virtualPad = new MultiVirtualPad();
+		virtualPad = new MultiVirtualPad();
 		
 		#if desktop
 			virtualPad.alpha = 0.0;

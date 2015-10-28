@@ -113,21 +113,26 @@ class TiledLevel extends TiledMap
         switch (o.type.toLowerCase( ))
         {
             case "start":
-                addPlayer( x, y, state );
+                addPlayer(x, y, state);
 
             case "oneway":
+				// Create the oneway solid at the appropriate position, with the appropriate size
                 var oneway : FlxObject = new FlxObject(x, y, o.width, o.height);
+				// Configure it to allow collisions from the top, only
                 oneway.allowCollisions = FlxObject.UP;
+				// It should not move when handling collisions
                 oneway.immovable = true;
-                state.oneways.add( oneway );
+				// And add it
+                state.oneways.add(oneway);
 
+			/** Collectibles **/
             case "collectible":
-                switch (o.name.toLowerCase( ))
+                switch (o.name.toLowerCase())
                 {
                     case "musicnote":
                         // We create a variable to contain the file name
                         var file : String;
-                        // We either get the file name from the map or assign it a default ound
+                        // We either get the file name from the map or assign it a default sound
                         if (o.custom.contains("file"))
                             file = o.custom.get("file");
                         else
@@ -137,7 +142,6 @@ class TiledLevel extends TiledMap
                         var musicnote : MusicNote = new MusicNote(x, y, state, file);
                         state.collectibles.add(musicnote);
                 }
-            /** Collectibles **/
 
             /** Elements **/
             /*	case "decoration":
@@ -154,17 +158,22 @@ class TiledLevel extends TiledMap
 				}*/
 
             /** Enemies **/
-            /*case "runner":
-				var jumper : Bool = o.custom.contains("jumper");
-				var runner : EnemyRunner = new EnemyRunner(x, y, state, jumper);
-				initEnemy(runner, o);
-				state.addEnemy(runner);
-			case "walker": 
-				var hazardType : Hazard.HazardType = getHType(o);
-				var walker : EnemyWalker = new EnemyWalker(x, y, state);
-				initEnemy(walker, o);
-				walker.hazardType = hazardType;
-				state.addEnemy(walker);*/
+				case "enemy":
+					// Fetch properties
+					var sprite : String = o.custom.get("sprite");
+					var faceplayer : Bool = o.custom.contains("faceplayer");
+					var fps : Int = Enemy.DefaultFPS;
+					if (o.custom.contains("fps"))
+					{
+						fps = Std.parseInt(o.custom.get("fps"));
+					}
+					
+					// Instantiate the enemy
+					var enemy : Enemy = new Enemy(x, y, state);
+					// Initialize it with the read properties
+					enemy.init(o.width, o.height, sprite, fps, faceplayer);
+					// And add it to the world
+					state.enemies.add(enemy);
         }
     }
 
@@ -193,8 +202,9 @@ class TiledLevel extends TiledMap
 
     public function addPlayer( x : Int, y : Int, state : PlayState ) : Void
     {
+		trace("Spawning player at " + x + ", " + y);
         var player : Player = new Player(x, y, state);
-
+		state.add(player);
         state.addPlayer( player );
     }
 

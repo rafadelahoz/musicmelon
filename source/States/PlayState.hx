@@ -83,11 +83,10 @@ class PlayState extends GameState
 
 		// Load level objects
 		level.loadObjects(this);
-
-		// if (player == null)
-		add(player = new Player(FlxG.width / 2, FlxG.height / 2, this));
 		
 		add(entities);
+		
+		add(enemies);
 		add(oneways);
 		add(collectibles);
 		
