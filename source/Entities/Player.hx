@@ -14,6 +14,8 @@ class Player extends Entity
 	/* State variables */
 	// Whether the player is on air or on ground
 	public var onAir : Bool;
+	// True if the player has died and the animation is playing
+	public var dying : Bool;
 
 	public function new(X : Float, Y : Float, World : PlayState)
 	{
@@ -23,6 +25,7 @@ class Player extends Entity
 		animation.add("idle", [0]);
 		animation.add("walk", [4, 5, 6, 7], 6, true);
 		animation.add("jump", [8]);
+		animation.add("dead", [0, 4, 8], 10, true);
 
 		setSize(12, 12);
 		offset.set(2, 4);
@@ -30,6 +33,7 @@ class Player extends Entity
 		flipX = false;
 
 		onAir = false;
+		dying = false;
 	}
 
 	override public function update()
@@ -40,33 +44,44 @@ class Player extends Entity
 		// The gravity will affect nonetheless
 		acceleration.y = GameConstants.Gravity;
 
-		// Handle movement
-		if (GamePad.checkButton(GamePad.Left))
+		if (dying)
 		{
-			velocity.x = -HSpeed;
-			facing = FlxObject.LEFT;
+			if (!isOnScreen())
+			{
+				trace("dead");
+				GameController.OnDeath();
+			}
 		}
-		else if (GamePad.checkButton(GamePad.Right))
+		else // if alive
 		{
-			velocity.x = HSpeed;
-			facing = FlxObject.RIGHT;
-		}
-		else
-			velocity.x = 0;
+			// Handle movement
+			if (GamePad.checkButton(GamePad.Left))
+			{
+				velocity.x = -HSpeed;
+				facing = FlxObject.LEFT;
+			}
+			else if (GamePad.checkButton(GamePad.Right))
+			{
+				velocity.x = HSpeed;
+				facing = FlxObject.RIGHT;
+			}
+			else
+				velocity.x = 0;
 
-		// When on ground, the melon can jump
-		if (!onAir)
-		{
-			// But only if we are not falling and A is pressed
-			if (velocity.y == 0 && GamePad.justPressed(GamePad.A))
-				velocity.y = -JumpSpeed;
-		}
-		else
-		{
-			// When going up on air, releasing the jump button
-			// cancels the jump so we have more control
-			if (GamePad.justReleased(GamePad.A) && velocity.y < 0)
-				velocity.y /= 2;
+			// When on ground, the melon can jump
+			if (!onAir)
+			{
+				// But only if we are not falling and A is pressed
+				if (velocity.y == 0 && GamePad.justPressed(GamePad.A))
+					velocity.y = -JumpSpeed;
+			}
+			else
+			{
+				// When going up on air, releasing the jump button
+				// cancels the jump so we have more control
+				if (GamePad.justReleased(GamePad.A) && velocity.y < 0)
+					velocity.y /= 2;
+			}
 		}
 
 		// The parent will compute the actual position considering
@@ -77,14 +92,21 @@ class Player extends Entity
 	override public function draw()
 	{
 		// Handle animations (may be better to do this on update?)
-		if (onAir)
-			animation.play("jump");
+		if (dying)
+		{
+			animation.play("dead");
+		}
 		else
 		{
-			if (velocity.x == 0)
-				animation.play("idle");
+			if (onAir)
+				animation.play("jump");
 			else
-				animation.play("walk");
+			{
+				if (velocity.x == 0)
+					animation.play("idle");
+				else
+					animation.play("walk");
+			}
 		}
 
 		// Flip the graphic when looking to the left
@@ -98,6 +120,27 @@ class Player extends Entity
 
 	public function onCollisionWithEnemy(enemy : Enemy)
 	{
-		// What?
+		if (!dying)
+		{
+			// You are dead, so jump out of the way
+			solid = false;
+			
+			if (enemy.getMidpoint().x > getMidpoint().x)
+			{
+				velocity.x = -HSpeed;
+				facing = FlxObject.RIGHT;
+			}
+			else
+			{
+				velocity.x = HSpeed;
+				facing = FlxObject.LEFT;
+			}
+				
+			velocity.y = -JumpSpeed * 0.8;
+			
+			dying = true;
+			
+			world.onPlayerDeath();
+		}
 	}
 }

@@ -84,8 +84,6 @@ class PlayState extends GameState
 		// Load level objects
 		level.loadObjects(this);
 		
-		add(entities);
-		
 		add(enemies);
 		add(oneways);
 		add(collectibles);
@@ -223,6 +221,11 @@ class PlayState extends GameState
 	public function handlePlayerPosition()
 	{
 		// TODO!
+	}
+	
+	public function onPlayerDeath()
+	{
+		FlxG.camera.follow(null);
 	}
 	
 	function doDebug() : Void

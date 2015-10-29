@@ -10,6 +10,13 @@ import flixel.util.FlxPoint;
  */
 class Enemy extends Entity
 {
+	public static var B_IDLE 		: Int = 0;
+	public static var B_WALK_DUMMY 	: Int = 1;
+	public static var B_WALK_SMART  : Int = 2;
+	public static var B_PATH		: Int = 3;
+	public static var B_FLY			: Int = 4;
+	// ...
+
 	// Default frames-per-second for animation
 	public static var DefaultFPS : Int = 5;
 
@@ -24,11 +31,14 @@ class Enemy extends Entity
 		super(X, Y, World);
 	}
 	
+	public var collideWithLevel : Bool;
+	
 	/**
 	 * Initializes the enemy with the given parameters
 	 * @param Width			Width of the enemy & enemy sprite
 	 * @param Height 		Height of the enemy & enemy sprite
 	 * @param Sprite		Filename (without path or extension) of the spritesheet for the enemy
+	 * @param Mask			FlxPoint with (w, h) of collision mask. Will be centered on Width, Height
 	 * @param FPS			Frames-per-second for the enemy animation
 	 * @param FacePlayer	Whether the enemy shall always face the player or not
 	 */
@@ -64,6 +74,20 @@ class Enemy extends Entity
 		
 		// Shall the enemy face the player?
 		facePlayer = FacePlayer;
+		
+		// You are collidable
+		collideWithLevel = true;
+		
+		// And delegate!
+		onInit();
+	}
+	
+	/**
+	 * Override this with custom logic
+	 */
+	public function onInit()
+	{
+		// Override me!
 	}
 
 	override public function update()
@@ -91,7 +115,6 @@ class Enemy extends Entity
 	public function onCollisionWithPlayer(player : Player)
 	{
 		// Override me!
-		GameController.OnDeath();
 	}
 	
 	/**
