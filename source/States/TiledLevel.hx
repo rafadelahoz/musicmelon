@@ -167,11 +167,12 @@ class TiledLevel extends TiledMap
 					var mask 	: FlxPoint 	= EnemyBuilder.parseMask(o);
 					var faceplayer 	: Bool 	= EnemyBuilder.parseFacePlayer(o);
 					var fps 		: Int 	= EnemyBuilder.parseFPS(o);
+					var flip		: Bool	= EnemyBuilder.parseFlip(o);
 					
 					// Instantiate the enemy
-					var enemy : Enemy = EnemyBuilder.build(x, y, state, behaviour);
+					var enemy : Enemy = EnemyBuilder.build(o, x, y, state, behaviour);
 					// Initialize it with the read properties
-					enemy.init(o.width, o.height, sprite, mask, fps, faceplayer);
+					enemy.init(o.width, o.height, sprite, mask, fps, faceplayer, flip);
 					// And add it to the world
 					state.enemies.add(enemy);				
         }

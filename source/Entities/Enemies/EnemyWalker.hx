@@ -60,12 +60,10 @@ class EnemyWalker extends Enemy
 		if (facing == FlxObject.RIGHT)
 		{
 			velocity.x = hspeed;
-			flipX = false;
 		}
 		else
 		{
 			velocity.x = -hspeed;
-			flipX = true;
 		}
 
 		if (justTouched(FlxObject.RIGHT) || justTouched(FlxObject.LEFT))
@@ -80,6 +78,8 @@ class EnemyWalker extends Enemy
 		{
 			animation.play("idle");
 		}
+		
+		flipX = (flipOnMove && velocity.x < 0);
 	}
 
 	public function turn() : Void

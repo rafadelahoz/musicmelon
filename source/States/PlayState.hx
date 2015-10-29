@@ -142,6 +142,9 @@ class PlayState extends GameState
 
 		// Enemies vs World
 		resolveEnemiesWorldCollision();
+		
+		// Enemies vs One way solids
+		FlxG.collide(oneways, enemies);
 
 		// Player vs World
 		level.collideWithLevel(player);
@@ -225,6 +228,7 @@ class PlayState extends GameState
 	
 	public function onPlayerDeath()
 	{
+		// Fix the camera when player dies
 		FlxG.camera.follow(null);
 	}
 	

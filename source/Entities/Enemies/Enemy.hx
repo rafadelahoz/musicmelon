@@ -22,6 +22,7 @@ class Enemy extends Entity
 
 	// If true, the enemy will face the player (left or right)
 	public var facePlayer : Bool;
+	public var flipOnMove : Bool;
 
 	/**
 	 * Basic constructor, just position and world
@@ -42,7 +43,7 @@ class Enemy extends Entity
 	 * @param FPS			Frames-per-second for the enemy animation
 	 * @param FacePlayer	Whether the enemy shall always face the player or not
 	 */
-	public function init(Width : Int, Height : Int, ?Sprite : String = null, ?Mask : FlxPoint, ?FPS : Int = -1, ?FacePlayer : Bool = false)
+	public function init(Width : Int, Height : Int, ?Sprite : String = null, ?Mask : FlxPoint, ?FPS : Int = -1, ?FacePlayer : Bool = false, ?Flip : Bool = true)
 	{
 		// If no sprite is specified, just make a placeholder rectangle
 		if (Sprite == null)
@@ -74,6 +75,9 @@ class Enemy extends Entity
 		
 		// Shall the enemy face the player?
 		facePlayer = FacePlayer;
+		
+		// Or shall we flip when we move
+		 flipOnMove = Flip;
 		
 		// You are collidable
 		collideWithLevel = true;

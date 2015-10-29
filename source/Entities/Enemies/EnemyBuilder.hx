@@ -8,7 +8,7 @@ import utils.tiled.TiledObject;
  **/
 class EnemyBuilder
 {
-	public static function build(X : Float, Y : Float, World : PlayState, Behaviour : Int) : Enemy
+	public static function build(o : TiledObject, X : Float, Y : Float, World : PlayState, Behaviour : Int) : Enemy
 	{
 		var enemy : Enemy = null;
 		
@@ -18,6 +18,11 @@ class EnemyBuilder
 				enemy = new Enemy(X, Y, World);
 			case Enemy.B_WALK_DUMMY, Enemy.B_WALK_SMART:
 				enemy = new EnemyWalker(X, Y, World, Behaviour);
+				if (o.custom.contains("speed"))
+				{
+					var speed : Int = Std.parseInt(o.custom.get("speed"));
+					cast(enemy, EnemyWalker).hspeed = speed;
+				}
 			default:
 				trace("Creating not yet supported behaviour " + Behaviour + ", defaulting to Idle");
 				enemy = new Enemy(X, Y, World);
@@ -85,6 +90,11 @@ class EnemyBuilder
 	
 	public static function parseFacePlayer(o : TiledObject) : Bool
 	{
-		return o.custom.contains("faceplayer");
+		return o.custom.contains("faceplayer") && o.custom.get("faceplayer") != "false";
+	}
+	
+	public static function parseFlip(o : TiledObject) : Bool
+	{
+		return o.custom.contains("flip") && o.custom.get("flip") != "false";
 	}
 }
