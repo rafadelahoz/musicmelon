@@ -44,6 +44,9 @@ class Player extends Entity
         // Check whether we are airborne
         onAir = !isTouching( FlxObject.DOWN );
 
+        // And check whether we are over a ladder
+        onLadder = overlaps(world.ladders);
+
         // The gravity will affect nonetheless
         acceleration.y = GameConstants.Gravity;
 
@@ -86,42 +89,48 @@ class Player extends Entity
                     velocity.y /= 2;
             }
 
+            if (!onLadder)
+            {
+                if (GamePad.checkButton(GamePad.Down) && overlapsAt(x, y + height, world.ladders))
+                {
+                    onLadder = true;
+                    y += 8;
+                    last.y = y;
+                }
+            }
             // When on a ladder gravity doesn't affect melon
+            
             if ( onLadder )
             {
-                if ( overlaps( world.ladders ))
+                // If the player is in the air but touching a ladder then gravity doesn't affect it
+                // if ( onAir )
+                velocity.y = 0;
+                acceleration.y = 0;
+                
+                // If the player presses up then the melon goes up unnafected by gravity
+                if ( GamePad.checkButton( GamePad.Up ) )
                 {
-                    // If the player is in the air but touching a ladder then gravity doesn't affect it
-                    if ( onAir )
-                        acceleration.y = 0;
-                    else // If the player is touching a ladder but on the ground gravity affects it
-                        acceleration.y = GameConstants.Gravity;
-
-                    // If the player presses up then the melon goes up unnafected by gravity
-                    if ( GamePad.checkButton( GamePad.Up ) )
-                    {
-                        velocity.y = -HSpeed;
-                        acceleration.y = 0;
-                    }
-                    // If the player presses down then the melon goes down unnafected by gravity
-                    else if ( GamePad.checkButton( GamePad.Down ) )
-                    {
-                        velocity.y = HSpeed;
-                    }
-
-                    // If the player stops pressing Up or Down then the melon stops moving up or down
-                    if (GamePad.justReleased(GamePad.Up) || GamePad.justReleased(GamePad.Down))
-                    {
-                        velocity.y = 0;
-                    }
-
-                    // If the melon is not touching the ladder anymore then regular gravity rules apply
-                    if (!overlaps( world.ladders))
-                    {
-                        acceleration.y = GameConstants.Gravity;
-                        onLadder = false;
-                    }
+                    velocity.y = -HSpeed;
+                    acceleration.y = 0;
                 }
+                // If the player presses down then the melon goes down unnafected by gravity
+                else if ( GamePad.checkButton( GamePad.Down ) )
+                {
+                    velocity.y = HSpeed;
+                }
+
+                // If the player stops pressing Up or Down then the melon stops moving up or down
+                if (GamePad.justReleased(GamePad.Up) || GamePad.justReleased(GamePad.Down))
+                {
+                    velocity.y = 0;
+                }
+
+                // If the melon is not touching the ladder anymore then regular gravity rules apply
+                /*if (!overlaps( world.ladders))
+                {
+                    acceleration.y = GameConstants.Gravity;
+                    onLadder = false;
+                }*/
             }
         }
 
