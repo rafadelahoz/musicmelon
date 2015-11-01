@@ -125,7 +125,15 @@ class TiledLevel extends TiledMap
 				// And add it
                 state.oneways.add(oneway);
 
-			/** Collectibles **/
+            case "ladder":
+                // Create the stair based on the position decided in TiledMap. The staircase is made a bit higher to
+                // detect collisions from the top.
+                var ladder : FlxObject = new FlxObject(x, y, o.width, o.height);
+                ladder.allowCollisions = FlxObject.UP;
+                ladder.immovable = true;
+                state.ladders.add(ladder);
+
+            /** Collectibles **/
             case "collectible":
                 switch (o.name.toLowerCase())
                 {
