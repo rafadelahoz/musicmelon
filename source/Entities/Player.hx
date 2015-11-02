@@ -20,6 +20,9 @@ class Player extends Entity
     public var onLadder : Bool;
 	// Which ladder the player currently is
 	public var ladder : FlxObject;
+	
+	// Debug!
+	public var immortal : Bool;
 
     public function new( X : Float, Y : Float, World : PlayState )
     {
@@ -39,6 +42,8 @@ class Player extends Entity
         onAir = false;
         dying = false;
         onLadder = false;
+		
+		immortal = false;
     }
 
     override public function update( )
@@ -116,9 +121,8 @@ class Player extends Entity
 					
 					// Get down from the top of a stair case
 					// TODO: Make a smooth animation or something!
-					if (GamePad.checkButton(GamePad.Down) && overlapsAt(x, y + height, world.oneways))
+					if (overlapsAt(x, y + height, world.oneways))
 					{
-						onLadder = true;
 						y += 6;
 						last.y = y;
 						velocity.y = 0;
@@ -178,8 +182,13 @@ class Player extends Entity
 
     public function onCollisionWithEnemy( enemy : Enemy )
     {
+		if ( immortal )
+			return;
+			
         if ( !dying )
         {
+			trace("hit by " + enemy);
+			
             // You are dead, so jump out of the way
             solid = false;
 

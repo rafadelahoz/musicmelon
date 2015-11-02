@@ -93,10 +93,6 @@ class TiledLevel extends TiledMap
                 loadObject( o, group, state );
             }
         }
-
-        if ( state.player == null )
-            addPlayer( 64, 64, state );
-
     }
 
     private function loadObject( o : TiledObject, g : TiledObjectGroup, state : PlayState ) : Void
@@ -211,10 +207,19 @@ class TiledLevel extends TiledMap
 
     public function addPlayer( x : Int, y : Int, state : PlayState ) : Void
     {
-		trace("Spawning player at " + x + ", " + y);
-        var player : Player = new Player(x, y, state);
-		state.add(player);
-        state.addPlayer( player );
+		if (state.player == null)
+		{
+			trace("Spawning player at " + x + ", " + y);
+			var player : Player = new Player(x, y, state);
+			state.add(player);
+			state.addPlayer( player );
+		}
+		else
+		{
+			trace("Positioning player at " + x + ", " + y);
+			state.player.x = x;
+			state.player.y = y;
+		}
     }
 
     public function collideWithLevel( obj : FlxObject, ?notifyCallback : FlxObject -> FlxObject -> Void, ?processCallback : FlxObject -> FlxObject -> Bool ) : Bool

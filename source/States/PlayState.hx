@@ -62,8 +62,8 @@ class PlayState extends GameState
 
         // Prepare state holders
         entities = new FlxTypedGroup<Entity>();
-
-        player = null;
+		
+		// Prepare gameplay groups
         oneways = new FlxGroup();
         ladders = new FlxGroup();
         enemies = new FlxGroup();
@@ -74,6 +74,7 @@ class PlayState extends GameState
         level = new TiledLevel("assets/maps/" + mapName + ".tmx");
 
         // Read level parameters
+		// (...if any)
 
         // Add tilemaps
         add( level.backgroundTiles );
@@ -85,15 +86,12 @@ class PlayState extends GameState
         add( oneways );
         add( collectibles );
 
-        handlePlayerPosition( );
-
         // Add overlay tiles
         add( level.overlayTiles );
 
         // Set the camera to follow the player
-        if ( player != null )
-            FlxG.camera.follow( player, FlxCamera.STYLE_TOPDOWN, null, 0 );
-
+        FlxG.camera.follow( player, FlxCamera.STYLE_TOPDOWN, null, 0 );
+		
         // Delegate
         super.create( );
     }
@@ -230,11 +228,6 @@ class PlayState extends GameState
             player = null;
 
         player = p;
-    }
-
-    public function handlePlayerPosition( )
-    {
-        // TODO!
     }
 
     public function onPlayerDeath( )
