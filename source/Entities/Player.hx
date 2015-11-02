@@ -18,6 +18,8 @@ class Player extends Entity
     public var dying : Bool;
     // Whether the player is on a ladder
     public var onLadder : Bool;
+	// Which ladder the player currently is
+	public var ladder : FlxObject;
 
     public function new( X : Float, Y : Float, World : PlayState )
     {
@@ -46,6 +48,11 @@ class Player extends Entity
 
         // And check whether we are over a ladder
         onLadder = overlaps(world.ladders);
+		// We are over a ladder if we are really close to its center!
+		if (onLadder && ladder != null)
+		{
+			onLadder = Math.abs(ladder.getMidpoint().x - getMidpoint().x) <= 4;
+		}
 
         // The gravity will affect nonetheless
         acceleration.y = GameConstants.Gravity;
@@ -88,18 +95,7 @@ class Player extends Entity
                 if ( GamePad.justReleased( GamePad.A ) && velocity.y < 0 )
                     velocity.y /= 2;
             }
-
-            if (!onLadder)
-            {
-                if (GamePad.checkButton(GamePad.Down) && overlapsAt(x, y + height, world.ladders))
-                {
-                    onLadder = true;
-                    y += 8;
-                    last.y = y;
-                }
-            }
-            // When on a ladder gravity doesn't affect melon
-            
+			
             if ( onLadder )
             {
                 // If the player is in the air but touching a ladder then gravity doesn't affect it
@@ -116,7 +112,17 @@ class Player extends Entity
                 // If the player presses down then the melon goes down unnafected by gravity
                 else if ( GamePad.checkButton( GamePad.Down ) )
                 {
-                    velocity.y = HSpeed;
+					velocity.y = HSpeed;
+					
+					// Get down from the top of a stair case
+					// TODO: Make a smooth animation or something!
+					if (GamePad.checkButton(GamePad.Down) && overlapsAt(x, y + height, world.oneways))
+					{
+						onLadder = true;
+						y += 6;
+						last.y = y;
+						velocity.y = 0;
+					}
                 }
 
                 // If the player stops pressing Up or Down then the melon stops moving up or down
@@ -125,12 +131,14 @@ class Player extends Entity
                     velocity.y = 0;
                 }
 
-                // If the melon is not touching the ladder anymore then regular gravity rules apply
-                /*if (!overlaps( world.ladders))
+                // If we are on ground, after all, no laddering please
+				// We are on ground if we have a one-way-solid beneath (we are on top of a stair)
+				// or if we have no more stair below, that is, at y+height
+                if (overlapsAt(x, y+1, world.oneways) || !overlapsAt(x, y+height, world.ladders))
                 {
                     acceleration.y = GameConstants.Gravity;
                     onLadder = false;
-                }*/
+                }
             }
         }
 
@@ -194,8 +202,8 @@ class Player extends Entity
         }
     }
 
-    public function onCollisionWithLadder()
+    public function onCollisionWithLadder(Ladder : FlxObject)
     {
-        onLadder = true;
+		ladder = Ladder;
     }
 }

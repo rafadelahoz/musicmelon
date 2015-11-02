@@ -221,7 +221,7 @@ class PlayState extends GameState
     **/
     public function onLadderCollision( ladder : FlxObject, player : Player )
     {
-        // player.onCollisionWithLadder( );
+        player.onCollisionWithLadder( ladder );
     }
 
     public function addPlayer( p : Player ) : Void

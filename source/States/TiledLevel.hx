@@ -128,7 +128,7 @@ class TiledLevel extends TiledMap
             case "ladder":
                 // Create the stair based on the position decided in TiledMap. The staircase is made a bit higher to
                 // detect collisions from the top.
-                var ladder : FlxObject = new FlxObject(x + (o.width/2-1), y, 2, o.height);
+                var ladder : FlxObject = new FlxObject(x + (o.width/2-1), y-1, 2, o.height+1);
                 // ladder.allowCollisions = FlxObject.UP;
                 ladder.immovable = true;
                 state.ladders.add(ladder);
