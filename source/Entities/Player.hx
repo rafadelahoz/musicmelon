@@ -20,6 +20,8 @@ class Player extends Entity
     public var onLadder : Bool;
 	// Which ladder the player currently is
 	public var ladder : FlxObject;
+    // Is the player climbing?
+    public var climbing : Bool;
 	
 	// Debug!
 	public var immortal : Bool;
@@ -42,6 +44,7 @@ class Player extends Entity
         onAir = false;
         dying = false;
         onLadder = false;
+        climbing = false;
 		
 		immortal = false;
     }
@@ -58,6 +61,9 @@ class Player extends Entity
 		{
 			onLadder = Math.abs(ladder.getMidpoint().x - getMidpoint().x) <= 4;
 		}
+
+        if (!onLadder)
+            climbing = false;
 
         // The gravity will affect nonetheless
         acceleration.y = GameConstants.Gravity;
@@ -87,11 +93,15 @@ class Player extends Entity
                 velocity.x = 0;
 
             // When on ground, the melon can jump
-            if ( !onAir )
+            if ( !onAir || onLadder )
             {
                 // But only if we are not falling and A is pressed
                 if ( velocity.y == 0 && GamePad.justPressed( GamePad.A ) )
+                {
                     velocity.y = -JumpSpeed;
+                    onLadder = false;
+                    climbing = false;
+                }
             }
             else
             {
@@ -103,36 +113,49 @@ class Player extends Entity
 			
             if ( onLadder )
             {
-                // If the player is in the air but touching a ladder then gravity doesn't affect it
-                // if ( onAir )
-                velocity.y = 0;
-                acceleration.y = 0;
+                if (!climbing)
+                {
+                    color = 0xFFFFFFFF;
+                    if ( GamePad.checkButton( GamePad.Up ) || GamePad.checkButton( GamePad.Down ) )
+                    {
+                        climbing = true;
+                    }
+                }
                 
-                // If the player presses up then the melon goes up unnafected by gravity
-                if ( GamePad.checkButton( GamePad.Up ) )
+                if (climbing)
                 {
-                    velocity.y = -HSpeed;
-                    acceleration.y = 0;
-                }
-                // If the player presses down then the melon goes down unnafected by gravity
-                else if ( GamePad.checkButton( GamePad.Down ) )
-                {
-					velocity.y = HSpeed;
-					
-					// Get down from the top of a stair case
-					// TODO: Make a smooth animation or something!
-					if (overlapsAt(x, y + height, world.oneways))
-					{
-						y += 6;
-						last.y = y;
-						velocity.y = 0;
-					}
-                }
-
-                // If the player stops pressing Up or Down then the melon stops moving up or down
-                if (GamePad.justReleased(GamePad.Up) || GamePad.justReleased(GamePad.Down))
-                {
+                    color = 0xFFFF00FF;
+                    // If the player is in the air but touching a ladder then gravity doesn't affect it
+                    // if ( onAir )
                     velocity.y = 0;
+                    acceleration.y = 0;
+                    
+                    // If the player presses up then the melon goes up unnafected by gravity
+                    if ( GamePad.checkButton( GamePad.Up ) )
+                    {
+                        velocity.y = -HSpeed;
+                        acceleration.y = 0;
+                    }
+                    // If the player presses down then the melon goes down unnafected by gravity
+                    else if ( GamePad.checkButton( GamePad.Down ) )
+                    {
+    					velocity.y = HSpeed;
+    					
+    					// Get down from the top of a stair case
+    					// TODO: Make a smooth animation or something!
+    					if (overlapsAt(x, y + height, world.oneways))
+    					{
+    						y += 6;
+    						last.y = y;
+    						velocity.y = 0;
+    					}
+                    }
+
+                    // If the player stops pressing Up or Down then the melon stops moving up or down
+                    if (GamePad.justReleased(GamePad.Up) || GamePad.justReleased(GamePad.Down))
+                    {
+                        velocity.y = 0;
+                    }
                 }
 
                 // If we are on ground, after all, no laddering please
