@@ -20,6 +20,9 @@ class Enemy extends Entity
 	// Default frames-per-second for animation
 	public static var DefaultFPS : Int = 5;
 
+	// Current behaviour for the enemy
+	public var behaviour : Int;
+
 	// If true, the enemy will face the player (left or right)
 	public var facePlayer : Bool;
 	public var flipOnMove : Bool;

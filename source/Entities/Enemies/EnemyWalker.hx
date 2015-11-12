@@ -8,8 +8,6 @@ class EnemyWalker extends Enemy
 	public var hspeed : Float = 40;
 	public var turnDelay : Float = 0.5;
 	
-	public var behaviour : Int;
-	
 	var brain : StateMachine;
 	
 	public function new(X : Float, Y : Float, World : PlayState, Behaviour : Int)

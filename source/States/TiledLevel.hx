@@ -174,7 +174,7 @@ class TiledLevel extends TiledMap
 					var flip		: Bool	= EnemyBuilder.parseFlip(o);
 					
 					// Instantiate the enemy
-					var enemy : Enemy = EnemyBuilder.build(o, x, y, state, behaviour);
+					var enemy : Enemy = EnemyBuilder.build(g, o, x, y, state, behaviour);
 					// Initialize it with the read properties
 					enemy.init(o.width, o.height, sprite, mask, fps, faceplayer, flip);
 					// And add it to the world

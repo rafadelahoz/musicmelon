@@ -7,7 +7,7 @@ class GameController
 	public static function Init()
 	{
 		// What?
-		GameStatus.currentLevel = "0";
+		GameStatus.currentLevel = "Outside";
 	}
 
 	/** Game Management API **/
