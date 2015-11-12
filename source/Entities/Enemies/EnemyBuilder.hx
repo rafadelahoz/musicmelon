@@ -26,8 +26,7 @@ class EnemyBuilder
 				}
 			case Enemy.B_PATH:
 				var pathId      : String = EnemyBuilder.parsePath(o);
-				trace(pathId);
-                var path        : Path = null;
+				var path        : Path = null;
                 if (pathId != null) 
                 {
                     path = EnemyBuilder.buildPath(pathId, g);    
@@ -151,8 +150,6 @@ class EnemyBuilder
 			point.add(x, y);
 
 		var path : Path = new Path(id, points);
-
-		trace("Path " + id +  " found! " + path);
 
 		return path;
 	}

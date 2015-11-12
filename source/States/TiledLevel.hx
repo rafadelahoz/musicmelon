@@ -113,13 +113,7 @@ class TiledLevel extends TiledMap
 
             case "oneway":
 				// Create the oneway solid at the appropriate position, with the appropriate size
-                var oneway : FlxObject = new FlxObject(x, y, o.width, o.height);
-				// Configure it to allow collisions from the top, only
-                oneway.allowCollisions = FlxObject.UP;
-				// It should not move when handling collisions
-                oneway.immovable = true;
-				// And add it
-                state.oneways.add(oneway);
+                spawnOneway(x, y, o.width, o.height, state);
 
             case "ladder":
                 // Create the stair based on the position decided in TiledMap. The staircase is made a bit higher to
@@ -128,6 +122,9 @@ class TiledLevel extends TiledMap
                 // ladder.allowCollisions = FlxObject.UP;
                 ladder.immovable = true;
                 state.ladders.add(ladder);
+
+                // Spawn the appropriate oneway solid at the top of the stair
+                spawnOneway(x, y, o.width, 8, state);
 
             /** Collectibles **/
             case "collectible":
@@ -180,6 +177,17 @@ class TiledLevel extends TiledMap
 					// And add it to the world
 					state.enemies.add(enemy);				
         }
+    }
+
+    public function spawnOneway(x : Float, y : Float, width : Float, height : Float, state : PlayState)
+    {
+        var oneway : FlxObject = new FlxObject(x, y, width, height);
+        // Configure it to allow collisions from the top, only
+        oneway.allowCollisions = FlxObject.UP;
+        // It should not move when handling collisions
+        oneway.immovable = true;
+        // And add it
+        state.oneways.add(oneway);
     }
 
     function getImageSource( gid : Int ) : TiledImage

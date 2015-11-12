@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="8" tileheight="8" nextobjectid="25">
- <tileset firstgid="1" name="tileset_a" tilewidth="8" tileheight="8">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="80" height="50" tilewidth="8" tileheight="8" nextobjectid="30">
+ <tileset firstgid="1" name="tileset_a" tilewidth="8" tileheight="8" tilecount="900">
   <image source="../tilesets/tileset_a.png" trans="ff00ff" width="240" height="240"/>
   <tile id="0">
    <properties>
@@ -105,9 +105,30 @@
   <object id="17" name="oneway" type="oneway" x="504" y="200" width="80" height="8"/>
   <object id="18" name="ladder 1" type="ladder" x="152" y="120" width="16" height="64"/>
   <object id="20" name="ladder 1" type="ladder" x="144" y="272" width="16" height="48"/>
-  <object id="21" name="oneway" type="oneway" x="216" y="184" width="16" height="8"/>
-  <object id="22" name="oneway" type="oneway" x="152" y="120" width="16" height="8"/>
   <object id="23" name="ladder 1" type="ladder" x="216" y="184" width="16" height="120"/>
-  <object id="24" name="oneway" type="oneway" x="144" y="272" width="16" height="8"/>
+  <object id="25" name="Pathdude" type="enemy" x="264" y="104" width="16" height="16">
+   <properties>
+    <property name="behaviour" value="path"/>
+    <property name="flip" value="true"/>
+    <property name="path" value="path1"/>
+    <property name="speed" value="30"/>
+    <property name="sprite" value="enemy_plant_sheet"/>
+   </properties>
+  </object>
+  <object id="26" name="path1" type="path" x="272" y="112">
+   <polyline points="0,0 -160,0"/>
+  </object>
+  <object id="27" name="Updown" type="enemy" x="408" y="208" width="16" height="16">
+   <properties>
+    <property name="behaviour" value="path"/>
+    <property name="faceplayer" value="true"/>
+    <property name="path" value="path2"/>
+    <property name="speed" value="35"/>
+    <property name="sprite" value="enemy_bubble_sheet"/>
+   </properties>
+  </object>
+  <object id="29" name="path2" type="path" x="416" y="216">
+   <polyline points="0,0 0,80"/>
+  </object>
  </objectgroup>
 </map>

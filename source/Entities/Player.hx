@@ -115,7 +115,6 @@ class Player extends Entity
             {
                 if (!climbing)
                 {
-                    color = 0xFFFFFFFF;
                     if ( GamePad.checkButton( GamePad.Up ) || GamePad.checkButton( GamePad.Down ) )
                     {
                         climbing = true;
@@ -124,7 +123,6 @@ class Player extends Entity
                 
                 if (climbing)
                 {
-                    color = 0xFFFF00FF;
                     // If the player is in the air but touching a ladder then gravity doesn't affect it
                     // if ( onAir )
                     velocity.y = 0;
