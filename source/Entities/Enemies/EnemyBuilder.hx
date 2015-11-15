@@ -44,6 +44,15 @@ class EnemyBuilder
 				trace("Creating not yet supported behaviour " + Behaviour + ", defaulting to Idle");
 				enemy = new Enemy(X, Y, World);
 		}
+
+		var colorStr : String = o.custom.get("color");
+		if (colorStr != null)
+		{
+			if (colorStr.indexOf("0x") == -1)
+				colorStr = "0x" + colorStr;
+			var color : Int = Std.parseInt(colorStr);
+			enemy.color = color;
+		}
 		
 		return enemy;
 	}

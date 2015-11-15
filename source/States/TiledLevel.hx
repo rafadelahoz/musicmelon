@@ -124,7 +124,7 @@ class TiledLevel extends TiledMap
                 state.ladders.add(ladder);
 
                 // Spawn the appropriate oneway solid at the top of the stair
-                spawnOneway(x, y, o.width, 8, state);
+                spawnOneway(x, y, o.width, 1, state);
 
             /** Collectibles **/
             case "collectible":

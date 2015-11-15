@@ -34,6 +34,7 @@ class Player extends Entity
         animation.add( "idle", [0] );
         animation.add( "walk", [4, 5, 6, 7], 6, true );
         animation.add( "jump", [8] );
+        animation.add( "climb", [9, 10], 6, true);
         animation.add( "dead", [0, 4, 8], 10, true );
 
         setSize( 12, 12 );
@@ -127,17 +128,22 @@ class Player extends Entity
                     // if ( onAir )
                     velocity.y = 0;
                     acceleration.y = 0;
+
+                    animation.paused = true;
                     
                     // If the player presses up then the melon goes up unnafected by gravity
                     if ( GamePad.checkButton( GamePad.Up ) )
                     {
                         velocity.y = -HSpeed;
                         acceleration.y = 0;
+                        animation.paused = false;
                     }
                     // If the player presses down then the melon goes down unnafected by gravity
                     else if ( GamePad.checkButton( GamePad.Down ) )
                     {
     					velocity.y = HSpeed;
+
+                        animation.paused = false;
     					
     					// Get down from the top of a stair case
     					// TODO: Make a smooth animation or something!
@@ -181,7 +187,9 @@ class Player extends Entity
         }
         else
         {
-            if ( onAir )
+            if (climbing)
+                animation.play("climb");
+            else if ( onAir )
                 animation.play( "jump" );
             else
             {
