@@ -141,7 +141,7 @@ class TiledLevel extends TiledMap
 
                         // We create the musical note with the object data and add it to the map
                         var musicnote : MusicNote = new MusicNote(x, y, state, file);
-                        state.collectibles.add(musicnote);
+                        state.addNote(musicnote);
                 }
 
             /** Elements **/

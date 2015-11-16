@@ -35,6 +35,12 @@ class PlayState extends GameState
 
     // General entities list for pausing
     public var entities : FlxTypedGroup<Entity>;
+	
+	// Specific Foot enemies list for positioning
+	public var feet : FlxTypedGroup<EnemyFoot>;
+	
+	// Game state variables
+	public var levelNotes : Int;
 
     /**
 	 * Builds a new PlayState which will load the map file specified by name
@@ -56,9 +62,8 @@ class PlayState extends GameState
 
     override public function create( ) : Void
     {
-
         // Random Background color
-        FlxG.camera.bgColor = 0xFF004488;
+        FlxG.camera.bgColor = 0xFF202060;
 
         // Prepare state holders
         entities = new FlxTypedGroup<Entity>();
@@ -69,7 +74,12 @@ class PlayState extends GameState
         enemies = new FlxGroup();
         collectibles = new FlxTypedGroup<Collectible>();
         decoration = new FlxTypedGroup<Decoration>();
+		
+		feet = new FlxTypedGroup<EnemyFoot>();
 
+		// Init game state
+		levelNotes = 0;
+		
         // Load the tiled level
         level = new TiledLevel("assets/maps/" + mapName + ".tmx");
 
@@ -142,7 +152,7 @@ class PlayState extends GameState
         resolveEnemiesWorldCollision( );
 
         // Enemies vs One way solids
-        FlxG.collide( oneways, enemies );
+        FlxG.collide( oneways, enemies, onEnemyWorldCollision );
 
         // Player vs World
         level.collideWithLevel( player );
@@ -157,7 +167,7 @@ class PlayState extends GameState
         FlxG.overlap( collectibles, player, onCollectibleCollision );
 
         // Player vs Enemies
-        FlxG.overlap( enemies, player, onEnemyCollision );
+        FlxG.overlap( enemies, player, onEnemyPlayerCollision );
 
         /* Update the GUI */
         // gui.updateGUI(icecream, this);
@@ -168,7 +178,14 @@ class PlayState extends GameState
         /* Go on */
         super.update( );
     }
+	
+    override public function draw( ) : Void
+    {
+        super.draw( );
+    }
 
+	/* Collision and Handlers */
+	
     function resolveGroupWorldCollision( group : FlxGroup ) : Void
     {
         for ( element in group )
@@ -193,35 +210,34 @@ class PlayState extends GameState
     {
         if ( (cast enemy).collideWithLevel )
         {
-            level.collideWithLevel( (cast enemy) );
+            level.collideWithLevel( (cast enemy), onEnemyWorldCollision );
         }
     }
 
-    override public function draw( ) : Void
-    {
-        super.draw( );
-    }
-
-    public function onEnemyCollision( one : Enemy, two : Player ) : Void
+    public function onEnemyPlayerCollision( one : Enemy, two : Player ) : Void
     {
         one.onCollisionWithPlayer( two );
         two.onCollisionWithEnemy( one );
     }
 
-    public function onCollectibleCollision( collectible : Collectible, player : Player )
+    public function onCollectibleCollision( collectible : Collectible, player : Player ) : Void
     {
         collectible.onCollisionWithPlayer( player );
         // Don't notify the player for now
     }
+	
+	public function onEnemyWorldCollision(level : FlxObject, enemy : FlxObject) : Void
+	{
+		(cast enemy).onCollisionWithWorld(level);
+	}
 
-    /**
-    *   Handles the collision between a ladder and the player.
-    **/
     public function onLadderCollision( ladder : FlxObject, player : Player )
     {
         player.onCollisionWithLadder( ladder );
     }
 
+	/* State handling */
+	
     public function addPlayer( p : Player ) : Void
     {
         if ( player != null )
@@ -229,6 +245,27 @@ class PlayState extends GameState
 
         player = p;
     }
+	
+	public function addNote(note : MusicNote)
+	{
+		levelNotes++;
+		collectibles.add(note);
+	}
+	
+	public function onNoteCollected()
+	{
+		// Add foot, finish level...
+		levelNotes--;
+		if (levelNotes > 0)
+		{
+			// Wait before spawning? Fall directly?
+			enemies.add(new EnemyFoot(0, 0, this, true));
+		}
+		else
+		{
+			GameController.OnLevelCompleted();
+		}
+	}
 
     public function onPlayerDeath( )
     {
@@ -236,12 +273,15 @@ class PlayState extends GameState
         FlxG.camera.follow( null );
     }
 
+	/* Debug utilities */
+	
     function doDebug( ) : Void
     {
         var mousePos : FlxPoint = FlxG.mouse.getWorldPosition( );
 
         if ( FlxG.mouse.justPressed )
         {
+			enemies.add(new EnemyFoot(mousePos.x, mousePos.y, this));
         }
 
         if ( FlxG.keys.pressed.O )

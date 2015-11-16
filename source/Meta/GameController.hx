@@ -34,4 +34,11 @@ class GameController
 	{
 		FlxG.switchState(new DeathState());
 	}
+	
+	public static function OnLevelCompleted()
+	{
+		// What
+		trace("Good job!");
+		StartGame();
+	}
 }

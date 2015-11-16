@@ -32,6 +32,8 @@ class DeathState extends GameState
 	{
 		super.create();
 		
+		FlxG.camera.bgColor = 0xFF004488;
+		
 		var message : String = getDemotivatorMessage();
 		var msgWidth : Int = Std.int(Math.min(message.length * 8, FlxG.width - 16));
 		

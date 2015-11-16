@@ -40,6 +40,8 @@ class MusicNote extends Collectible
         //TODO It is not playing on surface o.o
         _sound.play( true );
         super.onCollected( );
+		
+		world.onNoteCollected();
     }
 
     /**

@@ -80,7 +80,7 @@ class Enemy extends Entity
 		facePlayer = FacePlayer;
 		
 		// Or shall we flip when we move
-		 flipOnMove = Flip;
+		flipOnMove = Flip;
 		
 		// You are collidable
 		collideWithLevel = true;
@@ -120,6 +120,14 @@ class Enemy extends Entity
 	 * Handles the collision against player event
 	 */
 	public function onCollisionWithPlayer(player : Player)
+	{
+		// Override me!
+	}
+	
+	/**
+	 * Handles the collision against world event
+	 */
+	public function onCollisionWithWorld(World : FlxObject)
 	{
 		// Override me!
 	}
