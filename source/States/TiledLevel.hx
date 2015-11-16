@@ -57,8 +57,6 @@ class TiledLevel extends TiledMap
                 }
             }
 
-            // trace(tilesetName);
-
             if ( tileset == null )
                 throw "Tileset " + tilesetName + " could not be found. Check the name in the layer 'tileset' property or something.";
 
@@ -160,20 +158,8 @@ class TiledLevel extends TiledMap
 
             /** Enemies **/
 				case "enemy":
-					// Fetch behaviour
-					var behaviour : Int = EnemyBuilder.parseBehaviour(o);
-					
-					// Fetch properties
-                    var sprite 	: String	= EnemyBuilder.parseSprite(o);
-					var mask 	: FlxPoint 	= EnemyBuilder.parseMask(o);
-					var faceplayer 	: Bool 	= EnemyBuilder.parseFacePlayer(o);
-					var fps 		: Int 	= EnemyBuilder.parseFPS(o);
-					var flip		: Bool	= EnemyBuilder.parseFlip(o);
-					
 					// Instantiate the enemy
-					var enemy : Enemy = EnemyBuilder.build(g, o, x, y, state, behaviour);
-					// Initialize it with the read properties
-					enemy.init(o.width, o.height, sprite, mask, fps, faceplayer, flip);
+					var enemy : Enemy = EnemyBuilder.build(g, o, x, y, state);
 					// And add it to the world
 					state.enemies.add(enemy);				
         }
@@ -217,14 +203,12 @@ class TiledLevel extends TiledMap
     {
 		if (state.player == null)
 		{
-			trace("Spawning player at " + x + ", " + y);
 			var player : Player = new Player(x, y, state);
 			state.add(player);
 			state.addPlayer( player );
 		}
 		else
 		{
-			trace("Positioning player at " + x + ", " + y);
 			state.player.x = x;
 			state.player.y = y;
 		}

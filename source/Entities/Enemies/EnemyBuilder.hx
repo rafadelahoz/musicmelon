@@ -9,39 +9,55 @@ import utils.tiled.TiledObjectGroup;
  **/
 class EnemyBuilder
 {
-	public static function build(?g : TiledObjectGroup = null, o : TiledObject, X : Float, Y : Float, World : PlayState, Behaviour : Int) : Enemy
+	public static function build(?g : TiledObjectGroup = null, o : TiledObject, X : Float, Y : Float, World : PlayState) : Enemy
 	{
 		var enemy : Enemy = null;
 		
-		switch (Behaviour)
+		// Fetch behaviour
+		var behaviour : Int = EnemyBuilder.parseBehaviour(o);
+		
+		// Fetch properties
+		var sprite 		: String	= EnemyBuilder.parseSprite(o);
+		var mask 		: FlxPoint 	= EnemyBuilder.parseMask(o);
+		var faceplayer 	: Bool 		= EnemyBuilder.parseFacePlayer(o);
+		var fps 		: Int 		= EnemyBuilder.parseFPS(o);
+		var flip		: Bool		= EnemyBuilder.parseFlip(o);
+		var speed 		: Int		= EnemyBuilder.parseSpeed(o);
+		var delay		: Float		= EnemyBuilder.parseDelay(o);
+		var floaty		: Bool		= EnemyBuilder.parseFloaty(o);
+		
+		switch (behaviour)
 		{
 			case Enemy.B_IDLE:
+				// Create the enemy
 				enemy = new Enemy(X, Y, World);
 			case Enemy.B_WALK_DUMMY, Enemy.B_WALK_SMART:
-				enemy = new EnemyWalker(X, Y, World, Behaviour);
-				if (o.custom.contains("speed"))
-				{
-					var speed : Int = Std.parseInt(o.custom.get("speed"));
+				// Create the enemy
+				enemy = new EnemyWalker(X, Y, World, behaviour);
+				// Setup speed
+				if (speed > 0)
 					cast(enemy, EnemyWalker).hspeed = speed;
-				}
 			case Enemy.B_PATH:
-				var pathId      : String = EnemyBuilder.parsePath(o);
-				var path        : Path = null;
-                if (pathId != null) 
-                {
-                    path = EnemyBuilder.buildPath(pathId, g);    
-                }
-
-                enemy = new EnemyPathfinder(X, Y, World, Behaviour, path);
-
-                if (o.custom.contains("speed"))
-				{
-					var speed : Int = Std.parseInt(o.custom.get("speed"));
+				// Fetch path
+				var path : Path = EnemyBuilder.generatePath(g, o);
+				// Create the enemy
+                enemy = new EnemyPathfinder(X, Y, World, behaviour, path);
+				// Setup speed
+				if (speed > 0)
 					cast(enemy, EnemyPathfinder).Speed = speed;
-				}
-
+			case Enemy.B_FLY:
+				// Create the enemy
+				enemy = new EnemyBurstFly(X, Y, World);
+				// Setup speed
+				if (speed > 0)
+					cast(enemy, EnemyBurstFly).chargeSpeed = speed;
+				// Setup delay
+				if (delay > 0)
+					cast(enemy, EnemyBurstFly).idleBaseTime = delay;
+				// Setup floaty motion
+				// cast(enemy, EnemyBurstFly).floaty = floaty;
 			default:
-				trace("Creating not yet supported behaviour " + Behaviour + ", defaulting to Idle");
+				trace("Creating not yet supported behaviour " + behaviour + ", defaulting to Idle");
 				enemy = new Enemy(X, Y, World);
 		}
 
@@ -53,6 +69,9 @@ class EnemyBuilder
 			var color : Int = Std.parseInt(colorStr);
 			enemy.color = color;
 		}
+		
+		// Initialize it with the read properties
+		enemy.init(o.width, o.height, sprite, mask, fps, faceplayer, flip);
 		
 		return enemy;
 	}
@@ -100,6 +119,38 @@ class EnemyBuilder
 			return Enemy.DefaultFPS;
 		}
 	}
+	
+	public static function parseSpeed(o : TiledObject) : Int
+	{
+		if (o.custom.contains("speed"))
+		{
+			return Std.parseInt(o.custom.get("speed"));
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	
+	public static function parseDelay(o : TiledObject) : Float
+	{
+		if (o.custom.contains("delay"))
+		{
+			return Std.parseFloat(o.custom.get("delay"));
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	
+	public static function parseFloaty(o : TiledObject) : Bool
+	{
+		if (o.custom.contains("floaty"))
+			return o.custom.get("floaty") == "true";
+		else
+			return false;
+	}
 
 	public static function parseMask(o : TiledObject) : FlxPoint
 	{
@@ -122,6 +173,18 @@ class EnemyBuilder
 	public static function parseFlip(o : TiledObject) : Bool
 	{
 		return o.custom.contains("flip") && o.custom.get("flip") != "false";
+	}
+	
+	public static function generatePath(g : TiledObjectGroup, o : TiledObject) : Path
+	{
+		var pathId      : String = EnemyBuilder.parsePath(o);
+		var path        : Path = null;
+		if (pathId != null) 
+		{
+			path = EnemyBuilder.buildPath(pathId, g);    
+		}
+		
+		return path;
 	}
 
 	public static function parsePath(o : TiledObject) : String

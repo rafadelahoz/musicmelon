@@ -11,8 +11,11 @@ class EnemyFoot extends Enemy
 	public static var StompTime : Float = 0.3;
 	public static var AheadTime : Float = 0.2;
 	public static var QuickFallTime : Float = 0.3;
+	
 	public static var FallAcceleration : Int = 500;
 	public static var RiseAcceleration : Int = 500;
+	
+	public static var SolidThreshold : Float = 125;
 
 	public var brain : StateMachine;
 	public var timer : FlxTimer;
@@ -31,6 +34,8 @@ class EnemyFoot extends Enemy
 		brain = new StateMachine(null, onStateChange);
 		timer = new FlxTimer();
 		moving = false;
+		
+		allowCollisions = FlxObject.DOWN;
 		
 		maxVelocity.set(240, 240);
 		
@@ -113,7 +118,7 @@ class EnemyFoot extends Enemy
 	
 	public function fall()
 	{
-		collideWithLevel = (getMidpoint().distanceTo(player.getMidpoint()) < FlxG.height / 2);
+		solid = (getMidpoint().distanceTo(player.getMidpoint()) < SolidThreshold);
 	
 		color = 0xFFFF4141;
 		if (!onGround)
@@ -139,11 +144,14 @@ class EnemyFoot extends Enemy
 	/* Handlers */
 	override public function onCollisionWithWorld(level : FlxObject)
 	{
-		if (!onGround && acceleration.y > 0)
+		if (isTouching(FlxObject.DOWN) && !onGround && acceleration.y > 0)
 		{
 			onGround = true;
 			
-			FlxG.camera.shake(0.025, 0.35);
+			if (isOnScreen())
+			{
+				FlxG.camera.shake(0.025, 0.35);
+			}
 			
 			velocity.y = 0;
 			acceleration.y = 0;

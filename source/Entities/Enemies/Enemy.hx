@@ -25,7 +25,11 @@ class Enemy extends Entity
 
 	// If true, the enemy will face the player (left or right)
 	public var facePlayer : Bool;
+	// If true, the enemy will face the direction it's moving
 	public var flipOnMove : Bool;
+	
+	// Frames-per-second for the idle animation
+	var fps : Int;
 
 	/**
 	 * Basic constructor, just position and world
@@ -57,7 +61,7 @@ class Enemy extends Entity
 		// If a sprite is specified, use it!
 		{
 			// If no fps is provided, use the default
-			var fps = FPS;
+			fps = FPS;
 			if (fps < 0)
 				fps = DefaultFPS;
 				

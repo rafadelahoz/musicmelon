@@ -73,7 +73,6 @@ class Player extends Entity
         {
             if ( !isOnScreen( ) )
             {
-                trace( "dead" );
                 GameController.OnDeath( );
             }
         }
@@ -216,9 +215,7 @@ class Player extends Entity
 			
         if ( !dying )
         {
-			trace("hit by " + enemy);
-			
-            // You are dead, so jump out of the way
+			// You are dead, so jump out of the way
             solid = false;
 
             if ( enemy.getMidpoint( ).x > getMidpoint( ).x )

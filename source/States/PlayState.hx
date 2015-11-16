@@ -281,7 +281,9 @@ class PlayState extends GameState
 
         if ( FlxG.mouse.justPressed )
         {
-			enemies.add(new EnemyFoot(mousePos.x, mousePos.y, this));
+			var enemy : EnemyBurstFly = new EnemyBurstFly(mousePos.x, mousePos.y, this);
+			enemy.init(16, 16, "enemy_butterfly_sheet");
+			enemies.add(enemy);
         }
 
         if ( FlxG.keys.pressed.O )
