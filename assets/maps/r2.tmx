@@ -67,7 +67,7 @@
     <property name="sprite" value="enemy_fire_sheet"/>
    </properties>
   </object>
-  <object id="11" name="Player Start" type="start" x="64" y="320" width="16" height="16">
+  <object id="11" name="Player Start" type="start" x="400" y="144" width="16" height="16">
    <ellipse/>
   </object>
   <object id="18" name="ladder 1" type="ladder" x="1144" y="168" width="16" height="176"/>

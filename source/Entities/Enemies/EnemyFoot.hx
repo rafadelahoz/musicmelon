@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxObject;
+import flixel.FlxSprite;
 import flixel.util.FlxRect;
 import flixel.util.FlxTimer;
 
@@ -22,11 +23,18 @@ class EnemyFoot extends Enemy
 	public var moving : Bool;
 	public var onGround : Bool;
 
+	public var leg : FlxSprite;
+
 	public function new(X : Float, Y : Float, World : PlayState, ?Fall : Bool = false)
 	{
 		super(X, Y, World);
 		
-		makeGraphic(16, 16, 0xFFFFFFFF);
+		// makeGraphic(16, 16, 0xFFFFFFFF);
+		loadGraphic("assets/images/foot.png");
+		setSize(16, 16);
+		offset.set(8, 0);
+
+		leg = new FlxSprite(X, Y - 160).loadGraphic("assets/images/foot-leg.png");
 		
 		facePlayer = false;
 		collideWithLevel = true;
@@ -59,6 +67,16 @@ class EnemyFoot extends Enemy
 	{
 		brain.update();
 		super.update();
+
+		leg.x = x - offset.x;
+		leg.y = y - leg.height;
+		leg.update();
+	}
+
+	override public function draw()
+	{
+		super.draw();
+		leg.draw();
 	}
 	
 	public function onStateChange(newState : String)
@@ -120,7 +138,7 @@ class EnemyFoot extends Enemy
 	{
 		solid = (getMidpoint().distanceTo(player.getMidpoint()) < SolidThreshold);
 	
-		color = 0xFFFF4141;
+		// color = 0xFFFF4141;
 		if (!onGround)
 		{
 			acceleration.y = FallAcceleration;
@@ -133,7 +151,7 @@ class EnemyFoot extends Enemy
 	
 	public function rise()
 	{
-		color = 0xFF4141FF;
+		// color = 0xFF4141FF;
 		acceleration.y = -RiseAcceleration;
 		if (y + height < FlxG.camera.scroll.y)
 		{
