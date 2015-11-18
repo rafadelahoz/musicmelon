@@ -41,6 +41,7 @@ class PlayState extends GameState
 	
 	// Game state variables
 	public var levelNotes : Int;
+	public var collectedNotes : Array<String>;
 
     /**
 	 * Builds a new PlayState which will load the map file specified by name
@@ -79,6 +80,7 @@ class PlayState extends GameState
 
 		// Init game state
 		levelNotes = 0;
+		collectedNotes = new Array<String>();
 		
         // Load the tiled level
         level = new TiledLevel("assets/maps/" + mapName + ".tmx");
@@ -252,8 +254,10 @@ class PlayState extends GameState
 		collectibles.add(note);
 	}
 	
-	public function onNoteCollected()
+	public function onNoteCollected(sfxPath : String)
 	{
+		collectedNotes.push(sfxPath);
+	
 		// Add foot, finish level...
 		levelNotes--;
 		if (levelNotes > 0)
@@ -263,7 +267,7 @@ class PlayState extends GameState
 		}
 		else
 		{
-			GameController.OnLevelCompleted();
+			GameController.OnLevelCompleted(collectedNotes);
 		}
 	}
 

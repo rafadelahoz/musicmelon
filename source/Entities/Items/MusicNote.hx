@@ -16,6 +16,7 @@ class MusicNote extends Collectible
     *   Sound played when the note is collected
     **/
     private var _sound : FlxSound;
+	private var sfxPath : String;
 
     public function new( X : Float, Y : Float, World : PlayState, File : String )
     {
@@ -24,9 +25,11 @@ class MusicNote extends Collectible
         // We load the graphic of a musical note
         loadGraphic( "assets/images/musicnote_sheet.png", true, 16, 16 );
 
+		sfxPath = "assets/sounds/" + File;
+		
         // We create a new sound from a wav file
         //TODO Is this multiplatform?
-        _sound = FlxG.sound.load( "assets/sounds/" + File );
+        _sound = FlxG.sound.load( sfxPath );
 
         //We add an iddle animation to the note based on its graphic
         animation.add( "idle", [0] );
@@ -41,7 +44,7 @@ class MusicNote extends Collectible
         _sound.play( true );
         super.onCollected( );
 		
-		world.onNoteCollected();
+		world.onNoteCollected(sfxPath);
     }
 
     /**

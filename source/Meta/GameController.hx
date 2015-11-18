@@ -35,10 +35,14 @@ class GameController
 		FlxG.switchState(new DeathState());
 	}
 	
-	public static function OnLevelCompleted()
+	public static function OnLevelCompleted(notes : Array<String>)
 	{
-		// What
-		trace("Good job!");
-		StartGame();
+		FlxG.switchState(new PostLevelState(notes));
+	}
+	
+	public static function NextLevel()
+	{
+		// Increase level
+		FlxG.switchState(new PlayState(GameStatus.currentLevel));
 	}
 }
