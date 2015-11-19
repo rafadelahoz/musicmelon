@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxObject;
+import flixel.util.FlxMath;
 
 /**
  * Handles the player state, input, movement and response to events 
@@ -60,7 +61,7 @@ class Player extends Entity
 		// We are over a ladder if we are really close to its center!
 		if (onLadder && ladder != null)
 		{
-			onLadder = Math.abs(ladder.getMidpoint().x - getMidpoint().x) <= 4;
+			onLadder = Math.abs(ladder.getMidpoint().x - getMidpoint().x) <= 8;
 		}
 
         if (!onLadder)
@@ -153,6 +154,15 @@ class Player extends Entity
     						velocity.y = 0;
     					}
                     }
+
+					// When the player is climbing we center him slowly on the stair
+					if (velocity.y != 0)
+					{
+						var lerpedX : Float = FlxMath.lerp(getMidpoint().x, ladder.getMidpoint().x, 0.5);
+						var deltaX : Float = lerpedX - getMidpoint().x;
+						
+						x += deltaX;
+					}
 
                     // If the player stops pressing Up or Down then the melon stops moving up or down
                     if (GamePad.justReleased(GamePad.Up) || GamePad.justReleased(GamePad.Down))
