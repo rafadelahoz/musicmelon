@@ -290,6 +290,11 @@ class PlayState extends GameState
 			enemies.add(enemy);
         }
 
+		if (FlxG.keys.pressed.N)
+		{
+			GameController.NextLevel();
+		}
+		
         if ( FlxG.keys.pressed.O )
         {
             TextBox.Message( "NPC", "Are you here to steal our animals?" );

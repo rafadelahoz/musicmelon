@@ -2,5 +2,6 @@ package;
 
 class GameStatus
 {
-	public static var currentLevel : String;
+	public static var currentLevel : Int;
+	public static var currentLevelName : String;
 }

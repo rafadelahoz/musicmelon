@@ -22,12 +22,12 @@ class PauseMenu extends FlxSubState
 	{
 		super(0x00000000);
 		
-		group = new FlxSpriteGroup(0, FlxG.height);
+		group = new FlxSpriteGroup(0, 0);
 		
-		bg = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, 0xFF000000);
+		bg = new FlxSprite(FlxG.width/2-64, FlxG.height/2-12).makeGraphic(120, 24, 0xFF000000);
 		bg.scrollFactor.set();
 		
-		text = PixelText.New(FlxG.width / 2 - 48, FlxG.height / 4, " ~ PAUSED! ~ ");
+		text = PixelText.New(FlxG.width / 2 - 48, FlxG.height/2-4, " ~ PAUSED! ~ ");
 		text.scrollFactor.set();
 		
 		group.scrollFactor.set();
@@ -37,7 +37,7 @@ class PauseMenu extends FlxSubState
 		
 		add(group);
 		
-		FlxTween.tween(group, {y: 0}, 0.5, { ease: FlxEase.bounceOut });
+		// FlxTween.tween(group, {y: 0}, 0.5, { ease: FlxEase.bounceOut });
 		
 		add(GamePad.virtualPad);
 		
@@ -59,9 +59,11 @@ class PauseMenu extends FlxSubState
 		
 		if (GamePad.justReleased(GamePad.Start))
 		{
-			FlxTween.tween(group, {y: FlxG.height}, 0.5, { ease: FlxEase.bounceOut, complete: function(_t:FlxTween) {
+			/*FlxTween.tween(group, {y: FlxG.height}, 0.5, { ease: FlxEase.bounceOut, complete: function(_t:FlxTween) {
 				close();
-			}});
+			}});*/
+			
+			close();
 		}
 	
 		super.update();
