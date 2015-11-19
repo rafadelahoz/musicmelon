@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxObject;
 import flixel.util.FlxPoint;
 import utils.tiled.TiledObject;
 import utils.tiled.TiledObjectGroup;
@@ -56,6 +57,17 @@ class EnemyBuilder
 					cast(enemy, EnemyBurstFly).idleBaseTime = delay;
 				// Setup floaty motion
 				// cast(enemy, EnemyBurstFly).floaty = floaty;
+			case Enemy.B_SPAWN:
+				
+				var accel : Int = EnemyBuilder.parseAccel(o);
+				var direction : Int = EnemyBuilder.parseDirection(o);
+				var offset : Float = EnemyBuilder.parseOffset(o);
+				
+				enemy = new EnemySpawner(X, Y, World);
+				cast(enemy, EnemySpawner).setMotion(direction, speed, accel);
+				cast(enemy, EnemySpawner).delay = delay;
+				cast(enemy, EnemySpawner).idle = offset;
+				
 			default:
 				trace("Creating not yet supported behaviour " + behaviour + ", defaulting to Idle");
 				enemy = new Enemy(X, Y, World);
@@ -96,6 +108,8 @@ class EnemyBuilder
 				return Enemy.B_PATH;
 			case "fly":
 				return Enemy.B_FLY;
+			case "spawn":
+				return Enemy.B_SPAWN;
 			default:
 				trace("Unrecognized behaviour found: " + behaviour);
 				return Enemy.B_IDLE;
@@ -132,11 +146,56 @@ class EnemyBuilder
 		}
 	}
 	
+	public static function parseAccel(o : TiledObject) : Int
+	{
+		if (o.custom.contains("accel"))
+		{
+			return Std.parseInt(o.custom.get("accel"));
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	
+	public static function parseDirection(o : TiledObject) : Int
+	{
+		if (o.custom.contains("direction"))
+		{
+			switch (o.custom.get("direction").toLowerCase())
+			{
+				case "left":
+					return FlxObject.LEFT;
+				case "right":
+					return FlxObject.RIGHT;
+				case "up":
+					return FlxObject.UP;
+				case "down":
+					return FlxObject.DOWN;
+				default:
+			}
+		}
+		
+		return FlxObject.NONE;
+	}
+	
 	public static function parseDelay(o : TiledObject) : Float
 	{
 		if (o.custom.contains("delay"))
 		{
 			return Std.parseFloat(o.custom.get("delay"));
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	
+	public static function parseOffset(o : TiledObject) : Float
+	{
+		if (o.custom.contains("offset"))
+		{
+			return Std.parseFloat(o.custom.get("offset"));
 		}
 		else
 		{

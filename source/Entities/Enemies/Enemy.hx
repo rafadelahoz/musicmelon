@@ -15,6 +15,7 @@ class Enemy extends Entity
 	public static var B_WALK_SMART  : Int = 2;
 	public static var B_PATH		: Int = 3;
 	public static var B_FLY			: Int = 4;
+	public static var B_SPAWN		: Int = 5;
 	// ...
 
 	// Default frames-per-second for animation
