@@ -87,6 +87,7 @@ class PlayState extends GameState
 
         // Read level parameters
 		// (...if any)
+        FlxG.camera.bgColor = level.backgroundColor;
 
         // Add tilemaps
         add( level.backgroundTiles );

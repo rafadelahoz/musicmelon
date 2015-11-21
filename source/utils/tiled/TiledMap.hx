@@ -17,6 +17,8 @@ class TiledMap
 {
 	public var version:String; 
 	public var orientation:String;
+
+	public var backgroundColor : Int;
 	
 	public var width:Int;
 	public var height:Int; 
@@ -76,6 +78,18 @@ class TiledMap
 		if (orientation == null) 
 		{
 			orientation = "orthogonal";
+		}
+
+		backgroundColor = 0xFF000000;
+		
+		if (source.has.backgroundcolor)
+		{
+			var colorStr : String = source.att.backgroundcolor;
+			if (colorStr != null)
+			{
+				colorStr = StringTools.replace(colorStr, "#", "0xFF");
+				backgroundColor = Std.parseInt(colorStr);
+			}
 		}
 		
 		width = Std.parseInt(source.att.width);

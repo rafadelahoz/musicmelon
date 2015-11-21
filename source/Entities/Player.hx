@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.util.FlxMath;
 
@@ -26,6 +27,7 @@ class Player extends Entity
 	
 	// Debug!
 	public var immortal : Bool;
+    public var debugMode : Bool;
 
     public function new( X : Float, Y : Float, World : PlayState )
     {
@@ -37,6 +39,7 @@ class Player extends Entity
         animation.add( "jump", [8] );
         animation.add( "climb", [9, 10], 6, true);
         animation.add( "dead", [0, 4, 8], 10, true );
+        animation.add( "debug", [1]);
 
         setSize( 12, 12 );
         offset.set( 2, 4 );
@@ -48,11 +51,65 @@ class Player extends Entity
         onLadder = false;
         climbing = false;
 		
+        debugMode = false;
 		immortal = false;
     }
 
     override public function update( )
     {
+        if (debugMode)
+        {
+            solid = false;
+            immortal = true;
+
+            velocity.set();
+            acceleration.set();
+
+            if ( GamePad.checkButton( GamePad.Left ) )
+            {
+                velocity.x = -HSpeed;
+                facing = FlxObject.LEFT;
+            }
+            else if ( GamePad.checkButton( GamePad.Right ) )
+            {
+                velocity.x = HSpeed;
+                facing = FlxObject.RIGHT;
+            }
+
+            if ( GamePad.checkButton( GamePad.Up ) )
+            {
+                velocity.y = -HSpeed;
+                facing = FlxObject.LEFT;
+            }
+            else if ( GamePad.checkButton( GamePad.Down ) )
+            {
+                velocity.y = HSpeed;
+                facing = FlxObject.RIGHT;
+            }
+
+            velocity.x *= 2;
+            velocity.y *= 2;
+
+            if (FlxG.keys.justPressed.J)
+            {
+                debugMode = false;
+                velocity.set();
+                solid = true;
+                immortal = false;
+            }
+
+            super.update();
+
+            return;
+        }
+        else
+        {
+            if (FlxG.keys.justPressed.J)
+            {
+                debugMode = true;
+            }
+        }
+
         // Check whether we are airborne
         onAir = !isTouching( FlxObject.DOWN );
 
@@ -119,6 +176,18 @@ class Player extends Entity
                     if ( GamePad.checkButton( GamePad.Up ) || GamePad.checkButton( GamePad.Down ) )
                     {
                         climbing = true;
+
+                        if (GamePad.checkButton(GamePad.Down))
+                        {
+                            // Get down from the top of a stair case
+                            // TODO: Make a smooth animation or something!
+                            if (overlapsAt(x, y + height, world.oneways) && overlapsAt(x,y+height, world.ladders))
+                            {
+                                y += 6;
+                                last.y = y;
+                                velocity.y = 0;
+                            }
+                        }
                     }
                 }
                 
@@ -144,15 +213,6 @@ class Player extends Entity
     					velocity.y = HSpeed;
 
                         animation.paused = false;
-    					
-    					// Get down from the top of a stair case
-    					// TODO: Make a smooth animation or something!
-    					if (overlapsAt(x, y + height, world.oneways))
-    					{
-    						y += 6;
-    						last.y = y;
-    						velocity.y = 0;
-    					}
                     }
 
 					// When the player is climbing we center him slowly on the stair
@@ -190,7 +250,11 @@ class Player extends Entity
     override public function draw( )
     {
         // Handle animations (may be better to do this on update?)
-        if ( dying )
+        if (debugMode)
+        {
+            animation.play("debug");
+        }
+        else if ( dying )
         {
             animation.play( "dead" );
         }
