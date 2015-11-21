@@ -46,7 +46,7 @@
   <object id="2" name="oneway" type="oneway" x="624" y="168" width="48" height="8"/>
   <object id="4" name="musicnote" type="collectible" x="480" y="136" width="14" height="14">
    <properties>
-    <property name="file" value="notemalesigh.wav"/>
+    <property name="file" value="note_guitar.wav"/>
    </properties>
   </object>
   <object id="6" name="walk enemy" type="enemy" x="56" y="224" width="16" height="16">
@@ -250,19 +250,19 @@
   </object>
   <object id="58" name="musicnote" type="collectible" x="512" y="136" width="14" height="14">
    <properties>
-    <property name="file" value="notemalesigh.wav"/>
+    <property name="file" value="note_dog.wav"/>
    </properties>
   </object>
   <object id="59" name="oneway" type="oneway" x="440" y="168" width="32" height="8"/>
   <object id="60" name="musicnote" type="collectible" x="448" y="136" width="14" height="14">
    <properties>
-    <property name="file" value="notemalesigh.wav"/>
+    <property name="file" value="note_cat.wav"/>
    </properties>
   </object>
   <object id="61" name="oneway" type="oneway" x="536" y="168" width="32" height="8"/>
   <object id="62" name="musicnote" type="collectible" x="568" y="136" width="14" height="14">
    <properties>
-    <property name="file" value="notemalesigh.wav"/>
+    <property name="file" value="note_trumpet.wav"/>
    </properties>
   </object>
   <object id="63" name="path enemy" type="enemy" x="112" y="280" width="16" height="16">

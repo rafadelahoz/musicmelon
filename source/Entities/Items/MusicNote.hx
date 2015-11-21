@@ -23,7 +23,9 @@ class MusicNote extends Collectible
         super( X, Y, World );
 
         // We load the graphic of a musical note
-        loadGraphic( "assets/images/musicnote_sheet.png", true, 16, 16 );
+        loadGraphic( "assets/images/musicnote_sheet.png");
+        setSize(16, 16);
+        offset.set(4, 4);
 
 		sfxPath = "assets/sounds/" + File;
 		
