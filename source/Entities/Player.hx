@@ -20,13 +20,13 @@ class Player extends Entity
     public var dying : Bool;
     // Whether the player is on a ladder
     public var onLadder : Bool;
-	// Which ladder the player currently is
-	public var ladder : FlxObject;
+    // Which ladder the player currently is
+    public var ladder : FlxObject;
     // Is the player climbing?
     public var climbing : Bool;
-	
-	// Debug!
-	public var immortal : Bool;
+
+    // Debug!
+    public var immortal : Bool;
     public var debugMode : Bool;
 
     public function new( X : Float, Y : Float, World : PlayState )
@@ -37,9 +37,9 @@ class Player extends Entity
         animation.add( "idle", [0] );
         animation.add( "walk", [4, 5, 6, 7], 6, true );
         animation.add( "jump", [8] );
-        animation.add( "climb", [9, 10], 6, true);
+        animation.add( "climb", [9, 10], 6, true );
         animation.add( "dead", [0, 4, 8], 10, true );
-        animation.add( "debug", [1]);
+        animation.add( "debug", [1] );
 
         setSize( 12, 12 );
         offset.set( 2, 4 );
@@ -50,20 +50,20 @@ class Player extends Entity
         dying = false;
         onLadder = false;
         climbing = false;
-		
+
         debugMode = false;
-		immortal = false;
+        immortal = false;
     }
 
     override public function update( )
     {
-        if (debugMode)
+        if ( debugMode )
         {
             solid = false;
             immortal = true;
 
-            velocity.set();
-            acceleration.set();
+            velocity.set( );
+            acceleration.set( );
 
             if ( GamePad.checkButton( GamePad.Left ) )
             {
@@ -90,21 +90,21 @@ class Player extends Entity
             velocity.x *= 2;
             velocity.y *= 2;
 
-            if (FlxG.keys.justPressed.J)
+            if ( FlxG.keys.justPressed.J )
             {
                 debugMode = false;
-                velocity.set();
+                velocity.set( );
                 solid = true;
                 immortal = false;
             }
 
-            super.update();
+            super.update( );
 
             return;
         }
         else
         {
-            if (FlxG.keys.justPressed.J)
+            if ( FlxG.keys.justPressed.J )
             {
                 debugMode = true;
             }
@@ -114,14 +114,14 @@ class Player extends Entity
         onAir = !isTouching( FlxObject.DOWN );
 
         // And check whether we are over a ladder
-        onLadder = overlaps(world.ladders);
-		// We are over a ladder if we are really close to its center!
-		if (onLadder && ladder != null)
-		{
-			onLadder = Math.abs(ladder.getMidpoint().x - getMidpoint().x) <= 8;
-		}
+        onLadder = overlaps( world.ladders );
+        // We are over a ladder if we are really close to its center!
+        if ( onLadder && ladder != null )
+        {
+            onLadder = Math.abs( ladder.getMidpoint( ).x - getMidpoint( ).x ) <= 8;
+        }
 
-        if (!onLadder)
+        if ( !onLadder )
             climbing = false;
 
         // The gravity will affect nonetheless
@@ -168,20 +168,20 @@ class Player extends Entity
                 if ( GamePad.justReleased( GamePad.A ) && velocity.y < 0 )
                     velocity.y /= 2;
             }
-			
+
             if ( onLadder )
             {
-                if (!climbing)
+                if ( !climbing )
                 {
                     if ( GamePad.checkButton( GamePad.Up ) || GamePad.checkButton( GamePad.Down ) )
                     {
                         climbing = true;
 
-                        if (GamePad.checkButton(GamePad.Down))
+                        if ( GamePad.checkButton( GamePad.Down ) )
                         {
                             // Get down from the top of a stair case
                             // TODO: Make a smooth animation or something!
-                            if (overlapsAt(x, y + height, world.oneways) && overlapsAt(x,y+height, world.ladders))
+                            if ( overlapsAt( x, y + height, world.oneways ) && overlapsAt( x, y + height, world.ladders ) )
                             {
                                 y += 6;
                                 last.y = y;
@@ -190,8 +190,8 @@ class Player extends Entity
                         }
                     }
                 }
-                
-                if (climbing)
+
+                if ( climbing )
                 {
                     // If the player is in the air but touching a ladder then gravity doesn't affect it
                     // if ( onAir )
@@ -199,7 +199,7 @@ class Player extends Entity
                     acceleration.y = 0;
 
                     animation.paused = true;
-                    
+
                     // If the player presses up then the melon goes up unnafected by gravity
                     if ( GamePad.checkButton( GamePad.Up ) )
                     {
@@ -207,34 +207,34 @@ class Player extends Entity
                         acceleration.y = 0;
                         animation.paused = false;
                     }
-                    // If the player presses down then the melon goes down unnafected by gravity
+                        // If the player presses down then the melon goes down unnafected by gravity
                     else if ( GamePad.checkButton( GamePad.Down ) )
                     {
-    					velocity.y = HSpeed;
+                        velocity.y = HSpeed;
 
                         animation.paused = false;
                     }
 
-					// When the player is climbing we center him slowly on the stair
-					if (velocity.y != 0)
-					{
-						var lerpedX : Float = FlxMath.lerp(getMidpoint().x, ladder.getMidpoint().x, 0.5);
-						var deltaX : Float = lerpedX - getMidpoint().x;
-						
-						x += deltaX;
-					}
+                    // When the player is climbing we center him slowly on the stair
+                    if ( velocity.y != 0 )
+                    {
+                        var lerpedX : Float = FlxMath.lerp( getMidpoint( ).x, ladder.getMidpoint( ).x, 0.5 );
+                        var deltaX : Float = lerpedX - getMidpoint( ).x;
+
+                        x += deltaX;
+                    }
 
                     // If the player stops pressing Up or Down then the melon stops moving up or down
-                    if (GamePad.justReleased(GamePad.Up) || GamePad.justReleased(GamePad.Down))
+                    if ( GamePad.justReleased( GamePad.Up ) || GamePad.justReleased( GamePad.Down ) )
                     {
                         velocity.y = 0;
                     }
                 }
 
                 // If we are on ground, after all, no laddering please
-				// We are on ground if we have a one-way-solid beneath (we are on top of a stair)
-				// or if we have no more stair below, that is, at y+height
-                if (overlapsAt(x, y+1, world.oneways) || !overlapsAt(x, y+height, world.ladders))
+                // We are on ground if we have a one-way-solid beneath (we are on top of a stair)
+                // or if we have no more stair below, that is, at y+height
+                if ( overlapsAt( x, y + 1, world.oneways ) || !overlapsAt( x, y + height, world.ladders ) )
                 {
                     acceleration.y = GameConstants.Gravity;
                     onLadder = false;
@@ -250,9 +250,9 @@ class Player extends Entity
     override public function draw( )
     {
         // Handle animations (may be better to do this on update?)
-        if (debugMode)
+        if ( debugMode )
         {
-            animation.play("debug");
+            animation.play( "debug" );
         }
         else if ( dying )
         {
@@ -260,8 +260,8 @@ class Player extends Entity
         }
         else
         {
-            if (climbing)
-                animation.play("climb");
+            if ( climbing )
+                animation.play( "climb" );
             else if ( onAir )
                 animation.play( "jump" );
             else
@@ -284,12 +284,12 @@ class Player extends Entity
 
     public function onCollisionWithEnemy( enemy : Enemy )
     {
-		if ( immortal )
-			return;
-			
+        if ( immortal )
+            return;
+
         if ( !dying )
         {
-			// You are dead, so jump out of the way
+            // You are dead, so jump out of the way
             solid = false;
 
             if ( enemy.getMidpoint( ).x > getMidpoint( ).x )
@@ -311,8 +311,13 @@ class Player extends Entity
         }
     }
 
-    public function onCollisionWithLadder(Ladder : FlxObject)
+    public function onCollisionWithLadder( Ladder : FlxObject )
     {
-		ladder = Ladder;
+        ladder = Ladder;
+    }
+
+    public function onCollissionWithSpring( Spring : FlxObject )
+    {
+        velocity.y = -JumpSpeed - JumpSpeed/3;
     }
 }
