@@ -39,16 +39,12 @@ class PauseMenu extends FlxSubState
 		
 		// FlxTween.tween(group, {y: 0}, 0.5, { ease: FlxEase.bounceOut });
 		
-		add(GamePad.virtualPad);
-		
 		FlxG.inputs.reset();
-		GamePad.resetInputs();
 	}
 	
 	override public function close()
 	{
 		FlxG.inputs.reset();
-		GamePad.resetInputs();
 		
 		super.close();
 	}
