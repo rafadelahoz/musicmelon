@@ -124,6 +124,12 @@ class TiledLevel extends TiledMap
                 // Spawn the appropriate oneway solid at the top of the stair
                 spawnOneway(x, y, o.width, 1, state);
 
+            case "spring":
+            // Create the spring according to the position decided in TiledMap
+            var spring : FlxObject = new FlxObject(x, y, o.width, o.height + 2);
+            spring.allowCollisions = FlxObject.UP;
+            state.springs.add(spring);
+
             /** Collectibles **/
             case "collectible":
                 switch (o.name.toLowerCase())

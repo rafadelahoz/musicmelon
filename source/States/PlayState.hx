@@ -27,6 +27,7 @@ class PlayState extends GameState
     /* Entities lists */
     public var player : Player;
     public var level : TiledLevel;
+    public var springs : FlxGroup;
     public var oneways : FlxGroup;
     public var ladders : FlxGroup;
     public var enemies : FlxGroup;
@@ -73,6 +74,7 @@ class PlayState extends GameState
         oneways = new FlxGroup();
         ladders = new FlxGroup();
         enemies = new FlxGroup();
+        springs = new FlxGroup();
         collectibles = new FlxTypedGroup<Collectible>();
         decoration = new FlxTypedGroup<Decoration>();
 		
@@ -98,6 +100,7 @@ class PlayState extends GameState
         add( enemies );
         add( oneways );
         add( collectibles );
+        add(springs);
 
         // Add overlay tiles
         add( level.overlayTiles );
@@ -113,7 +116,6 @@ class PlayState extends GameState
 	 * Function that is called when this state is destroyed - you might want to 
 	 * consider setting all objects this state uses to null to help garbage collection.
 	 */
-
     override public function destroy( ) : Void
     {
         if ( player != null )
@@ -136,6 +138,9 @@ class PlayState extends GameState
 
         collectibles.destroy( );
         collectibles = null;
+
+        springs.destroy();
+        springs = null;
 
         super.destroy( );
     }
@@ -162,6 +167,9 @@ class PlayState extends GameState
 
         // Player vs One way solids
         FlxG.collide( oneways, player );
+
+        // Player vs Springs
+        FlxG.overlap( springs, player, onSpringCollision );
 
         // Player vs Ladders
         FlxG.overlap( ladders, player, onLadderCollision );
@@ -237,6 +245,11 @@ class PlayState extends GameState
     public function onLadderCollision( ladder : FlxObject, player : Player )
     {
         player.onCollisionWithLadder( ladder );
+    }
+
+    public function onSpringCollision(spring : FlxObject, player : Player )
+    {
+        player.onCollissionWithSpring( spring );
     }
 
 	/* State handling */
