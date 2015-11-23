@@ -297,12 +297,14 @@ class PlayState extends GameState
     {
         var mousePos : FlxPoint = FlxG.mouse.getWorldPosition( );
 
+        #if (!mobile)
         if ( FlxG.mouse.justPressed )
         {
 			var enemy : EnemyBurstFly = new EnemyBurstFly(mousePos.x, mousePos.y, this);
 			enemy.init(16, 16, "enemy_butterfly_sheet");
 			enemies.add(enemy);
         }
+        #end
 
 		if (FlxG.keys.pressed.N)
 		{
