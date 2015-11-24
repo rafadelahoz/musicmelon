@@ -18,9 +18,14 @@ class PauseMenu extends FlxSubState
 	var text : FlxBitmapTextField;
 	var bg : FlxSprite;
 	
-	public function new()
+	var world : PlayState;
+	
+	public function new(World : PlayState)
 	{
 		super(0x00000000);
+		
+		world = World;
+		world.onPause();
 		
 		group = new FlxSpriteGroup(0, 0);
 		
@@ -36,8 +41,6 @@ class PauseMenu extends FlxSubState
 		group.add(text);
 		
 		add(group);
-		
-		// FlxTween.tween(group, {y: 0}, 0.5, { ease: FlxEase.bounceOut });
 		
 		FlxG.inputs.reset();
 	}
@@ -55,10 +58,7 @@ class PauseMenu extends FlxSubState
 		
 		if (GamePad.justReleased(GamePad.Start))
 		{
-			/*FlxTween.tween(group, {y: FlxG.height}, 0.5, { ease: FlxEase.bounceOut, complete: function(_t:FlxTween) {
-				close();
-			}});*/
-			
+			world.onUnpause();
 			close();
 		}
 	

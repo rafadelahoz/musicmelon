@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxObject;
 import flixel.util.FlxPoint;
+import flixel.util.FlxTimer;
 
 /**
  * The Enemy class will be the base class for advanced enemies,
@@ -20,6 +21,9 @@ class Enemy extends Entity
 
 	// Default frames-per-second for animation
 	public static var DefaultFPS : Int = 5;
+	
+	// Stun duration time
+	public var stunTime : Float = 0.75;
 
 	// Current behaviour for the enemy
 	public var behaviour : Int;
@@ -31,6 +35,10 @@ class Enemy extends Entity
 	
 	// Frames-per-second for the idle animation
 	var fps : Int;
+	
+	// Whether the enemy is stunned or not
+	public var stunned : Bool;
+	public var stunTimer : FlxTimer;
 
 	/**
 	 * Basic constructor, just position and world
@@ -90,6 +98,10 @@ class Enemy extends Entity
 		// You are collidable
 		collideWithLevel = true;
 		
+		// And not stunned
+		stunned = false;
+		stunTimer = new FlxTimer();
+		
 		// And delegate!
 		onInit();
 	}
@@ -104,6 +116,9 @@ class Enemy extends Entity
 
 	override public function update()
 	{
+		if (stunned)
+			return;
+			
 		// Face player flag processing
 		if (facePlayer)
 		{
@@ -135,6 +150,37 @@ class Enemy extends Entity
 	public function onCollisionWithWorld(World : FlxObject)
 	{
 		// Override me!
+	}
+	
+	override public function onPause()
+	{
+		// Do nothing!
+	}
+	
+	override public function onNoteHeard(noteMask : FlxObject)
+	{
+		// Override me!
+		stun();
+	}
+	
+	public function stun()
+	{
+		if (!stunned)
+		{
+			stunned = true;
+			stunTimer.start(stunTime, onStunTimer);
+		}
+	}
+	
+	public function onStunEnd()
+	{
+		// Override me!
+		stunned = false;
+	}
+	
+	function onStunTimer(_timer:FlxTimer)
+	{
+		onStunEnd();
 	}
 	
 	/**

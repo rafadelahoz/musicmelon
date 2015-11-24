@@ -43,6 +43,8 @@ class PlayState extends GameState
 	// Game state variables
 	public var levelNotes : Int;
 	public var collectedNotes : Array<String>;
+	
+	public var paused : Bool;
 
     /**
 	 * Builds a new PlayState which will load the map file specified by name
@@ -153,7 +155,7 @@ class PlayState extends GameState
     {
         if ( GamePad.justReleased( GamePad.Start ) )
         {
-            openSubState( new PauseMenu() );
+			openSubState(new PauseMenu(this));
         }
 
         // Enemies vs World
@@ -196,6 +198,34 @@ class PlayState extends GameState
     }
 
 	/* Collision and Handlers */
+	
+	public function onPause()
+	{
+		paused = true;
+		enemies.callAll("onPause");
+	}
+	
+	public function onUnpause()
+	{
+		paused = false;
+	}
+	
+	public function onNotePlayed(x : Float, y : Float)
+	{
+		// Handle the playing of a note from the player
+		// Make the appropriate mask and collision check with it
+		var maskWidth : Int = 64;
+		var maskHeight : Int = 64;
+		var notemask : FlxObject = new FlxObject(x - maskWidth / 2, y - maskHeight / 2, maskWidth, maskHeight);
+		notemask.update();
+		FlxG.overlap(enemies, notemask, onEnemyListenedMusic);
+		notemask.destroy();
+	}
+	
+	function onEnemyListenedMusic(enemy : Enemy, musicMask : FlxObject)
+	{
+		enemy.onNoteHeard(musicMask);
+	}
 	
     function resolveGroupWorldCollision( group : FlxGroup ) : Void
     {

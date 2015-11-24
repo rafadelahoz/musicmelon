@@ -8,13 +8,13 @@ import flixel.util.FlxTimer;
 
 class EnemyFoot extends Enemy
 {
-	public static var IdleTime : Float = 2;
+	public static var IdleTime : Float = 5;
 	public static var StompTime : Float = 0.3;
-	public static var AheadTime : Float = 0.2;
+	public static var AheadTime : Float = 0.65;
 	public static var QuickFallTime : Float = 0.3;
 	
-	public static var FallAcceleration : Int = 500;
-	public static var RiseAcceleration : Int = 500;
+	public static var FallAcceleration : Int = 350;
+	public static var RiseAcceleration : Int = 350;
 	
 	public static var SolidThreshold : Float = 125;
 
@@ -46,6 +46,9 @@ class EnemyFoot extends Enemy
 		allowCollisions = FlxObject.DOWN;
 		
 		maxVelocity.set(240, 240);
+		
+		stunTimer = new FlxTimer();
+		stunned = false;
 		
 		world.feet.add(this);
 		
