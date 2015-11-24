@@ -185,7 +185,7 @@ class Player extends Entity
 				else
 					velocity.x = 0;
 
-				if (!onAir && !onLadder && GamePad.justPressed(GamePad.B))
+				if (!onAir && !climbing && GamePad.justPressed(GamePad.B))
 				{
 						playNote();
 						
@@ -211,7 +211,8 @@ class Player extends Entity
 		handleInstrument();
     }
 
-	public function playNote() {
+	public function playNote() 
+	{
 		if (world.collectedNotes.length > 0)
 		{
 			FlxG.sound.play(FlxRandom.getObject(world.collectedNotes));
