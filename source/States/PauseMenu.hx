@@ -18,6 +18,8 @@ class PauseMenu extends FlxSubState
 	var text : FlxBitmapTextField;
 	var bg : FlxSprite;
 	
+	var debugText : FlxBitmapTextField;
+	
 	var world : PlayState;
 	
 	public function new(World : PlayState)
@@ -35,10 +37,14 @@ class PauseMenu extends FlxSubState
 		text = PixelText.New(FlxG.width / 2 - 48, FlxG.height/2-4, " ~ PAUSED! ~ ");
 		text.scrollFactor.set();
 		
+		debugText = PixelText.New(0, 0, "");
+		debugText.scrollFactor.set();
+		
 		group.scrollFactor.set();
 		
 		group.add(bg);
 		group.add(text);
+		group.add(debugText);
 		
 		add(group);
 		
@@ -55,6 +61,8 @@ class PauseMenu extends FlxSubState
 	override public function update()
 	{
 		GamePad.handlePadState();
+		
+		debugText.text = GamePad.buttonHistory.substring(GamePad.buttonHistory.length - 10);
 		
 		if (GamePad.justReleased(GamePad.Start))
 		{

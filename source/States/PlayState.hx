@@ -336,12 +336,12 @@ class PlayState extends GameState
         }
         #end
 
-		if (FlxG.keys.pressed.N)
+		if (GameDebug.Cheat("UUDDRRL"))
 		{
 			GameController.NextLevel();
 		}
 		
-        if ( FlxG.keys.pressed.O )
+        if (GameDebug.Cheat("UUDDDDL"))
         {
             TextBox.Message( "NPC", "Are you here to steal our animals?" );
         }

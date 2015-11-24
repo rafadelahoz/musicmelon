@@ -72,7 +72,6 @@ class GameController
 	private static function ParseArgs() {
 		
 		var args : Array<String> = Sys.args();
-		trace(args);
 		
 		for (arg in args)
 		{

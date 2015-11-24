@@ -26,6 +26,9 @@ class GameState extends FlxState
 	{
 		// Update the GamePad state
 		GamePad.handlePadState();
+		
+		if (GameDebug.Cheat("LLLT"))
+			FlxG.resetState();
 	
 		// Before performing the actual update
 		super.update();

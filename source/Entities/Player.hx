@@ -108,7 +108,7 @@ class Player extends Entity
             velocity.x *= 2;
             velocity.y *= 2;
 
-            if ( FlxG.keys.justPressed.J )
+            if (GameDebug.Cheat("TUTUTU"))
             {
                 debugMode = false;
                 velocity.set( );
@@ -122,7 +122,7 @@ class Player extends Entity
         }
         else
         {
-            if ( FlxG.keys.justPressed.J )
+            if (GameDebug.Cheat("TUTUTU"))
             {
                 debugMode = true;
             }
