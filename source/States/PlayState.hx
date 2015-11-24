@@ -53,7 +53,7 @@ class PlayState extends GameState
         super( );
 
         if ( Level == null )
-            Level = "" + GameStatus.currentLevel;
+            Level = GameStatus.currentLevelName;
 
         mapName = Level;
     }

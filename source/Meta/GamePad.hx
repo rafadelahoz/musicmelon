@@ -51,6 +51,8 @@ class GamePad
 	
 	public static function resetInputs() : Void
 	{
+		if (MetaGamePad.Current != null)
+			MetaGamePad.Current.resetInputs();
 		initPadState();
 	}
 	
