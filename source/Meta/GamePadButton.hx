@@ -112,9 +112,10 @@ class GamePadButton extends Sprite
 				sprite.y = originalY + originalHeight / 2 - sprite.height / 2 + sprite.height*0.15;
 			}
 			
-			/*graphics.beginFill(color, 0.6);
+			// graphics.beginFill(color, 0.6);
+			graphics.beginFill(0x000000, 0.0);
 			graphics.drawRect(0, 0, bounds.width, bounds.height);
-			graphics.endFill();*/
+			graphics.endFill();
 		}
 		else
 		{
@@ -127,9 +128,10 @@ class GamePadButton extends Sprite
 				sprite.y = originalY;
 			}
 			
-			/*graphics.beginFill(color, 0.3);
+			// graphics.beginFill(color, 0.3);
+			graphics.beginFill(0x000000, 0.0);
 			graphics.drawRect(0, 0, bounds.width, bounds.height);
-			graphics.endFill();*/
+			graphics.endFill();
 		}
 		#end
 	}
@@ -139,14 +141,14 @@ class GamePadButton extends Sprite
 		if (bounds.width < bounds.height)
 		{
 			var ratio : Float = sprite.width / sprite.height;
-			sprite.width = bounds.width * 0.8;
-			sprite.height = bounds.width * 0.8 * ratio;
+			sprite.width = bounds.width * 0.75;
+			sprite.height = bounds.width * 0.75 * ratio;
 		}
 		else
 		{
 			var ratio : Float = sprite.width / sprite.height;
-			sprite.width = bounds.height * 0.8 * ratio;
-			sprite.height = bounds.height * 0.8;
+			sprite.width = bounds.height * 0.75 * ratio;
+			sprite.height = bounds.height * 0.75;
 		}
 		
 		originalWidth = sprite.width;

@@ -37,17 +37,18 @@ class MetaGamePad extends Sprite
 		
 		var buttonWidth : Int = Std.int(leftPanelWidth/2);
 		var buttonHeight : Int = Std.int(stageHeight / 3);
+		var halfHeight : Int = Std.int(buttonHeight / 2);
 		
-		var upBtn    : GamePadButton = new GamePadButton(Up, 	0, buttonHeight, leftPanelWidth, buttonHeight / 2); 
-		var downBtn  : GamePadButton = new GamePadButton(Down,  0, buttonHeight*3 - buttonHeight / 2, leftPanelWidth, buttonHeight / 2);
-		var leftBtn  : GamePadButton = new GamePadButton(Left,  0, upBtn.y + upBtn.height, buttonWidth, buttonHeight);
-		var rightBtn : GamePadButton = new GamePadButton(Right, buttonWidth, upBtn.y + upBtn.height, buttonWidth, buttonHeight);
+		var upBtn    : GamePadButton = new GamePadButton(Up, 	0, stageHeight - halfHeight*3, leftPanelWidth, halfHeight); 
+		var downBtn  : GamePadButton = new GamePadButton(Down,  0, buttonHeight*3 - buttonHeight / 2, leftPanelWidth, halfHeight);
+		var leftBtn  : GamePadButton = new GamePadButton(Left,  0, downBtn.y - downBtn.height, buttonWidth, halfHeight);
+		var rightBtn : GamePadButton = new GamePadButton(Right, buttonWidth, downBtn.y - downBtn.height, buttonWidth, halfHeight);
 		
 		var aBtn : GamePadButton = new GamePadButton(A, rightPanelX + buttonWidth, buttonHeight, buttonWidth, buttonHeight*2);
 		var bBtn : GamePadButton = new GamePadButton(B, rightPanelX, buttonHeight, buttonWidth, buttonHeight*2);
 		
-		var startBtn : GamePadButton = new GamePadButton(Start, rightPanelX + buttonWidth, 0, buttonWidth, buttonHeight/2);
-		var selectBtn : GamePadButton = new GamePadButton(Select, rightPanelX, 0, buttonWidth, buttonHeight/2);
+		var startBtn : GamePadButton = new GamePadButton(Start, rightPanelX + buttonWidth, 0, buttonWidth, halfHeight);
+		var selectBtn : GamePadButton = new GamePadButton(Select, rightPanelX, 0, buttonWidth, halfHeight);
 		
 		buttons = [upBtn, downBtn, leftBtn, rightBtn, aBtn, bBtn, startBtn, selectBtn];
 		
