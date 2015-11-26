@@ -40,6 +40,11 @@ class GameController
 		FlxG.switchState(new PlayState(GameStatus.currentLevelName));
 	}
 	
+	public static function RestartLevel()
+	{
+		FlxG.switchState(new PlayState(GameStatus.currentLevelName));
+	}
+	
 	public static function OnDeath()
 	{
 		FlxG.switchState(new DeathState());

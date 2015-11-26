@@ -66,7 +66,7 @@ class DeathState extends GameState
 	
 	function handleSelectedOption()
 	{
-		GameController.StartGame();
+		GameController.RestartLevel();
 	}
 	
 	function getDemotivatorMessage() : String

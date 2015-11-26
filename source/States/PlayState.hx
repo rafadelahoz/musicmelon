@@ -336,12 +336,12 @@ class PlayState extends GameState
         }
         #end
 
-		if (GameDebug.Cheat("UUDDRRL"))
+		if (GameDebug.Cheat("UUDDRRT"))
 		{
 			GameController.NextLevel();
 		}
 		
-        if (GameDebug.Cheat("UUDDDDL"))
+        if (GameDebug.Cheat("UDT"))
         {
             TextBox.Message( "NPC", "Are you here to steal our animals?" );
         }
