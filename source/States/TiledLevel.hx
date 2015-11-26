@@ -163,6 +163,10 @@ class TiledLevel extends TiledMap
 				}*/
 
             /** Enemies **/
+				case "footzone":
+					var zone : FlxObject = new FlxObject(x, y, o.width, o.height);
+					zone.immovable = false;
+					state.footzones.add(zone);
 				case "enemy":
 					// Instantiate the enemy
 					var enemy : Enemy = EnemyBuilder.build(g, o, x, y, state);

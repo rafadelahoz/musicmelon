@@ -68,6 +68,14 @@ class EnemyFoot extends Enemy
 	
 	override public function update()
 	{
+		if (!moving && world.footzones.length > 0 && !player.overlaps(world.footzones))
+		{
+			timer.active = false;
+			return;
+		}
+	
+		timer.active = true;
+	
 		brain.update();
 		super.update();
 

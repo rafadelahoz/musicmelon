@@ -31,6 +31,7 @@ class PlayState extends GameState
     public var oneways : FlxGroup;
     public var ladders : FlxGroup;
     public var enemies : FlxGroup;
+	public var footzones : FlxGroup;
     public var collectibles : FlxTypedGroup<Collectible>;
     public var decoration : FlxTypedGroup<Decoration>;
 
@@ -77,6 +78,7 @@ class PlayState extends GameState
         ladders = new FlxGroup();
         enemies = new FlxGroup();
         springs = new FlxGroup();
+		footzones = new FlxGroup();
         collectibles = new FlxTypedGroup<Collectible>();
         decoration = new FlxTypedGroup<Decoration>();
 		
@@ -99,9 +101,10 @@ class PlayState extends GameState
         // Load level objects
         level.loadObjects( this );
 
-        add( enemies );
-        add( oneways );
-        add( collectibles );
+		add(footzones);
+        add(enemies);
+        add(oneways);
+        add(collectibles);
         add(springs);
 
         // Add overlay tiles
@@ -330,9 +333,6 @@ class PlayState extends GameState
         #if (!mobile)
         if ( FlxG.mouse.justPressed )
         {
-			var enemy : EnemyBurstFly = new EnemyBurstFly(mousePos.x, mousePos.y, this);
-			enemy.init(16, 16, "enemy_butterfly_sheet");
-			enemies.add(enemy);
         }
         #end
 
@@ -340,10 +340,5 @@ class PlayState extends GameState
 		{
 			GameController.NextLevel();
 		}
-		
-        if (GameDebug.Cheat("UDT"))
-        {
-            TextBox.Message( "NPC", "Are you here to steal our animals?" );
-        }
     }
 }
