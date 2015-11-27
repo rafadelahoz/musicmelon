@@ -126,8 +126,9 @@ class TiledLevel extends TiledMap
 
             case "spring":
             // Create the spring according to the position decided in TiledMap
-            var spring : FlxObject = new FlxObject(x, y, o.width, o.height + 2);
-            spring.allowCollisions = FlxObject.UP;
+            var spring : Spring = new Spring(x, y, state);
+            var mask : FlxPoint = new FlxPoint(o.width - o.width/3, o.height - o.height /3);
+            spring.init(o.width, o.height, o.custom.get("sprite"), mask, Std.parseInt(o.custom.get("fps")));
             state.springs.add(spring);
 
             /** Collectibles **/
@@ -167,7 +168,7 @@ class TiledLevel extends TiledMap
 					// Instantiate the enemy
 					var enemy : Enemy = EnemyBuilder.build(g, o, x, y, state);
 					// And add it to the world
-					state.enemies.add(enemy);				
+					state.enemies.add(enemy);
         }
     }
 

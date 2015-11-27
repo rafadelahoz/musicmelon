@@ -249,6 +249,7 @@ class PlayState extends GameState
 
     public function onSpringCollision(spring : FlxObject, player : Player )
     {
+        (cast spring).onStepped();
         player.onCollissionWithSpring( spring );
     }
 
