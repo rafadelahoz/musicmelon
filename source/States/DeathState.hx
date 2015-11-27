@@ -35,7 +35,7 @@ class DeathState extends GameState
 		FlxG.camera.bgColor = 0xFF004488;
 		
 		var message : String = getDemotivatorMessage();
-		var msgWidth : Int = Std.int(Math.min(message.length * 8, FlxG.width - 16));
+		var msgWidth : Int = Std.int(Math.min(message.length * 8, 144));
 		
 		demotivator = PixelText.New(FlxG.width / 2 - msgWidth / 2, 52, message, 0xFFFFFFFF, msgWidth);
 		add(demotivator);
@@ -46,7 +46,9 @@ class DeathState extends GameState
 		melon.animation.add("sad", [0, 4], 2, true);
 		melon.animation.play("sad");
 		add(melon);
-		// add(new FlxGlitchSprite(melon, 1));
+		
+		// Add the frame at the top of the scene
+		add(frame);
 	}
 
 	override public function destroy():Void

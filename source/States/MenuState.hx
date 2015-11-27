@@ -31,7 +31,7 @@ class MenuState extends GameState
 	{
 		super.create();
 		
-		titleText = PixelText.New(16, 16, "- Depressed Music Melon -");
+		titleText = PixelText.New(FlxG.width/2-72, 24, "- Depressed \n\t\tMusic Melon -", 0xFFFFFFFF, 160);
 		add(titleText);
 		
 		menuText = PixelText.New(FlxG.width / 2 - 48, 2 * FlxG.height / 3, "( Press Start )");
@@ -39,6 +39,8 @@ class MenuState extends GameState
 
 		var fixedSM : flixel.system.scaleModes.PixelPerfectScaleMode = new PixelPerfectScaleMode();
 		FlxG.scaleMode = fixedSM;
+		
+		add(frame);
 		
 		GameController.Init();
 	}

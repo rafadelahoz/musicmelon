@@ -43,7 +43,7 @@ class PostLevelState extends GameState
 		add(background);
 		
 		var message : String = getMotivatorMessage();
-		var msgWidth : Int = Std.int(Math.min(message.length * 8, FlxG.width - 16));
+		var msgWidth : Int = Std.int(Math.min(message.length * 8, 144));
 		
 		motivator = PixelText.New(FlxG.width / 2 - msgWidth / 2, 52, message, 0xFFFFFFFF, msgWidth);
 		add(motivator);

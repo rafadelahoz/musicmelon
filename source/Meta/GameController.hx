@@ -1,10 +1,14 @@
 package;
 
+import openfl.display.Sprite;
+
 import flixel.FlxG;
 
 class GameController 
 {
 	public static var levels : Array<String> = ["house-0", "0", "Outside", "r1", "r2"];
+	
+	public static var GameContainer : Main;
 
 	public static function Init()
 	{

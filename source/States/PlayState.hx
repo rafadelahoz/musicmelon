@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxBasic;
 import flixel.FlxObject;
+import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.group.FlxTypedGroup;
 import flixel.FlxCamera;
@@ -23,7 +24,7 @@ class PlayState extends GameState
 
     /* General elements */
     var camera : FlxCamera;
-
+	
     /* Entities lists */
     public var player : Player;
     public var level : TiledLevel;
@@ -67,6 +68,8 @@ class PlayState extends GameState
 
     override public function create( ) : Void
     {
+		super.create();
+	
         // Random Background color
         FlxG.camera.bgColor = 0xFF202060;
 
@@ -113,8 +116,8 @@ class PlayState extends GameState
         // Set the camera to follow the player
         FlxG.camera.follow( player, FlxCamera.STYLE_TOPDOWN, null, 0 );
 		
-        // Delegate
-        super.create( );
+		// Add the frame at the top of the scene
+		add(frame);
     }
 
     /**
