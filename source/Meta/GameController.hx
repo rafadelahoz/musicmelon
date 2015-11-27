@@ -40,6 +40,11 @@ class GameController
 		FlxG.switchState(new PlayState(GameStatus.currentLevelName));
 	}
 	
+	public static function RestartLevel()
+	{
+		FlxG.switchState(new PlayState(GameStatus.currentLevelName));
+	}
+	
 	public static function OnDeath()
 	{
 		FlxG.switchState(new DeathState());
@@ -72,7 +77,6 @@ class GameController
 	private static function ParseArgs() {
 		
 		var args : Array<String> = Sys.args();
-		trace(args);
 		
 		for (arg in args)
 		{

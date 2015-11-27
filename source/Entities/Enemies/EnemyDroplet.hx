@@ -49,4 +49,9 @@ class EnemyDroplet extends Enemy
 		world.enemies.remove(this);
 		destroy();
 	}
+	
+	override public function onNoteHeard(noteMask : FlxObject)
+	{
+		// Do nothing!
+	}
 }

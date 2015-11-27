@@ -60,7 +60,7 @@ class MenuState extends GameState
 	override public function update():Void
 	{
 		super.update();
-		
+
 		if (GamePad.justPressed(GamePad.Start) || GamePad.justPressed(GamePad.A))
 			handleSelectedOption();
 		else if (GamePad.justReleased(GamePad.Select))

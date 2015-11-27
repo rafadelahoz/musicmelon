@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxObject;
 import flixel.util.FlxPath;
 
 class EnemyPathfinder extends Enemy
@@ -31,5 +32,10 @@ class EnemyPathfinder extends Enemy
 			flipX = (flipOnMove && velocity.x < 0);
 		
 		super.update();
+	}
+	
+	override public function onNoteHeard(noteMask : FlxObject)
+	{
+		stun();
 	}
 }

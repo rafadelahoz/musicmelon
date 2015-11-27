@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.FlxState;
 
 /**
@@ -16,12 +17,18 @@ class GameState extends FlxState
 	{
 		// Delegate
 		super.create();
+		
+		GamePad.resetInputs();
+		FlxG.inputs.reset();
 	}
 	
 	override public function update()
 	{
 		// Update the GamePad state
 		GamePad.handlePadState();
+		
+		if (GameDebug.Cheat("LLLT"))
+			FlxG.resetState();
 	
 		// Before performing the actual update
 		super.update();

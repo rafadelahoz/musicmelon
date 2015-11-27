@@ -5,17 +5,35 @@ import flash.display.BitmapData;
 import flixel.FlxG;
 
 class GamePad
-{	
+{
 	static var previousPadState : Map<Int, Bool>;
 	static var currentPadState : Map<Int, Bool>;
+	
+	public static var Buttons : Array<Int>;
+	public static var buttonHistory : String;
 	
 	public static function setupVirtualPad() : Void
 	{	
 		initPadState();
+		
+		trace(Buttons);
 	}
 	
 	public static function handlePadState() : Void
 	{
+		// Store the history
+		for (button in Buttons)
+		{
+			if (justPressed(button))
+				buttonHistory += buttonCode(button);
+		}
+		
+		// Maintaining its length to max 50
+		if (buttonHistory.length >= 100)
+			buttonHistory = buttonHistory.substring(50);
+			
+		GameDebug.CheatParser();
+	
 		/*previousPadState = currentPadState;
 		
 		currentPadState = new Map<Int, Bool>();
@@ -51,11 +69,17 @@ class GamePad
 	
 	public static function resetInputs() : Void
 	{
+		if (MetaGamePad.Current != null)
+			MetaGamePad.Current.resetInputs();
 		initPadState();
 	}
 	
 	private static function initPadState() : Void
 	{
+		Buttons = [Left, Right, Up, Down, A, B, Start, Select];
+	
+		buttonHistory = "";
+	
 		currentPadState = new Map<Int, Bool>();
 		currentPadState.set(Left, false);
 		currentPadState.set(Right, false);
@@ -75,6 +99,45 @@ class GamePad
 		previousPadState.set(B, false);
 		previousPadState.set(Start, false);
 		previousPadState.set(Select, false);
+	}
+	
+	public static function findInHistory(code : String) : Bool
+	{
+		var found : Bool =  buttonHistory.lastIndexOf(code) > -1;
+		if (found)
+		{
+			buttonHistory = "";
+		}
+		
+		return found;
+	}
+	
+	public static function buttonCode(button : Int) : String
+	{
+		var code : String = "";
+		
+		switch (button)
+		{
+			case GamePad.Left:
+				code = "L";
+			case GamePad.Right:
+				code = "R";
+			case GamePad.Up:
+				code = "U";
+			case GamePad.Down:
+				code = "D";
+			case GamePad.A:
+				code = "A";
+			case GamePad.B:
+				code = "B";
+			case GamePad.Start:
+				code = "S";
+			case GamePad.Select:
+				code = "T";
+			default:
+				code = "WHAT?";
+		}
+		return code;
 	}
 
 	public static var Left 	: Int = 0;

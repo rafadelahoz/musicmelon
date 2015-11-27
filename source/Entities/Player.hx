@@ -53,7 +53,10 @@ class Player extends Entity
         setSize( 12, 12 );
         offset.set( 2, 4 );
 		
-		instrument = new FlxSprite("assets/images/melon_instrument.png");
+		instrument = new FlxSprite(x, y);
+		instrument.loadGraphic("assets/images/melon_instrument.png", true, 16, 16);
+		instrument.animation.add("play", [0, 1], 4, true);
+		instrument.animation.play("play");
 		instrument.solid = false;
 		instrument.kill();
 
@@ -105,7 +108,7 @@ class Player extends Entity
             velocity.x *= 2;
             velocity.y *= 2;
 
-            if ( FlxG.keys.justPressed.J )
+            if (GameDebug.Cheat("TUTUTU"))
             {
                 debugMode = false;
                 velocity.set( );
@@ -119,7 +122,7 @@ class Player extends Entity
         }
         else
         {
-            if ( FlxG.keys.justPressed.J )
+            if (GameDebug.Cheat("TUTUTU"))
             {
                 debugMode = true;
             }
@@ -160,6 +163,11 @@ class Player extends Entity
 			{
 				// Do nothing, just play?
 				velocity.set();
+				
+				if (GamePad.justPressed(GamePad.B))
+				{
+					playNote();
+				}
 			}
 			else
 			{
@@ -177,15 +185,14 @@ class Player extends Entity
 				else
 					velocity.x = 0;
 
-				if (!onAir && !onLadder && GamePad.justPressed(GamePad.B))
+				if (!onAir && !climbing && GamePad.justPressed(GamePad.B))
 				{
-					if (world.collectedNotes.length > 0)
-					{
-						FlxG.sound.play(FlxRandom.getObject(world.collectedNotes));
+						playNote();
+						
 						playing = true;
 						instrument.revive();
 						timer.start(PlayTime, onPlayingEnd);
-					}
+					// }
 				}
 					
 				handleJump();
@@ -203,6 +210,22 @@ class Player extends Entity
 		
 		handleInstrument();
     }
+
+	public function playNote() 
+	{
+		if (world.collectedNotes.length > 0)
+		{
+			FlxG.sound.play(FlxRandom.getObject(world.collectedNotes));
+		}
+		
+		var xx : Float = getMidpoint().x + (flipX ? - instrument.width : 0);
+		var yy : Float = y - 2;
+		
+		var note : FxPlayedNote = new FxPlayedNote(xx, yy, facing);
+		world.add(note);
+		
+		world.onNotePlayed(getMidpoint().x, getMidpoint().y);
+	}
 	
 	public function onPlayingEnd(t:FlxTimer) {
 		if (t != null)
@@ -216,8 +239,9 @@ class Player extends Entity
 		if (instrument.alive)
 		{
 			instrument.x = getMidpoint().x + (flipX ? - instrument.width : 0);
-			instrument.y = y;
+			instrument.y = y - 2;
 			instrument.flipX = flipX;
+			instrument.animation.play("play");
 
 			instrument.update();
 		}

@@ -52,6 +52,19 @@ class EnemyWalker extends Enemy
 				});
 			}
 	}
+	
+	override public function onNoteHeard(noteMask : FlxObject)
+	{		
+		velocity.y = 0;
+		velocity.x = 0;
+		super.onNoteHeard(noteMask);
+	}
+	
+	override public function onStunEnd()
+	{
+		stunned = false;
+		brain.transition(turn, "turn");
+	}
 
 	public function walk() : Void
 	{

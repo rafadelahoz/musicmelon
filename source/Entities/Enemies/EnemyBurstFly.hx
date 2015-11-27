@@ -48,8 +48,26 @@ class EnemyBurstFly extends Enemy
 		brain.transition(idle, "idle");
 	}
 	
+	override public function onPause()
+	{
+		tween.active = false;
+		timer.active = false;
+	}
+	
 	override public function update() : Void
 	{
+		if (world.paused || stunned)
+		{
+			tween.active = false;
+			timer.active = false;
+			return;
+		}
+		else
+		{
+			tween.active = true;
+			timer.active = true;
+		}
+			
 		brain.update();
 		super.update();
 	}

@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.util.FlxTimer;
 import flixel.util.FlxRandom;
@@ -19,6 +20,9 @@ class PostLevelState extends GameState
 	
 	var currentOption : Int;
 	var options : Int;
+	
+	var melon : FlxSprite;
+	var instrument : FlxSprite;
 	
 	var notes : Array<String>;
 
@@ -45,7 +49,7 @@ class PostLevelState extends GameState
 		add(motivator);
 		
 		// Hack-y, don't look!
-		var melon : FlxSprite = new FlxSprite(FlxG.width / 2 - 8, 2 * FlxG.height/3);
+		melon = new FlxSprite(FlxG.width / 2 - 8, 2 * FlxG.height/3);
 		melon.loadGraphic("assets/images/melon_sheet.png", true, 16, 16);
 		melon.animation.add("play", [0, 4], 4, true);
 		melon.animation.play("play");
@@ -53,6 +57,13 @@ class PostLevelState extends GameState
 		new FlxTimer(2, function(_t:FlxTimer) {
 			melon.flipX = !melon.flipX;
 		}, 0);
+		
+		instrument = new FlxSprite(melon.x, melon.y);
+		instrument.loadGraphic("assets/images/melon_instrument.png", true, 16, 16);
+		instrument.animation.add("play", [0, 1], 4, true);
+		instrument.animation.play("play");
+		instrument.solid = false;
+		add(instrument);
 	}
 
 	override public function destroy():Void
@@ -64,15 +75,37 @@ class PostLevelState extends GameState
 	{
 		super.update();
 		
+		handleInstrument();
+		
 		if (GamePad.justPressed(GamePad.A) || GamePad.justPressed(GamePad.B)) 
 		{
 			// TODO: Play next note or something
 			// Random for now
-			FlxG.sound.play(FlxRandom.getObject(notes));
+			playNote();
 		}
 		
 		if (GamePad.justPressed(GamePad.Start))
 			handleSelectedOption();
+	}
+	
+	public function playNote() 
+	{
+		FlxG.sound.play(FlxRandom.getObject(notes));
+		
+		var xx : Float = melon.getMidpoint().x + (melon.flipX ? - instrument.width : 0);
+		var yy : Float = melon.y+2;
+		
+		var note : FxPlayedNote = new FxPlayedNote(xx, yy, (melon.flipX ? FlxObject.LEFT : FlxObject.RIGHT));
+		add(note);
+	}
+	
+	public function handleInstrument()
+	{
+		instrument.x = melon.getMidpoint().x + (melon.flipX ? - instrument.width : 0);
+		// instrument.y = melon.y - 2; // funny dance thing!
+		instrument.y = melon.y + 2;
+		instrument.flipX = melon.flipX;
+		instrument.animation.play("play");
 	}
 	
 	function handleSelectedOption()

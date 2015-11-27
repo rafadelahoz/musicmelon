@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxObject;
 import flixel.FlxSprite;
 
 /**
@@ -14,5 +15,17 @@ class Entity extends FlxSprite
 		super(X, Y);
 		
 		world = World;
+	}
+	
+	// Response to music heard
+	public function onNoteHeard(noteMask : FlxObject)
+	{
+		// Override me!
+	}
+	
+	// Called when pausing the game
+	public function onPause()
+	{
+		// Override me!
 	}
 }

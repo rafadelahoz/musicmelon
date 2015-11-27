@@ -31,6 +31,7 @@ class PlayState extends GameState
     public var oneways : FlxGroup;
     public var ladders : FlxGroup;
     public var enemies : FlxGroup;
+	public var footzones : FlxGroup;
     public var collectibles : FlxTypedGroup<Collectible>;
     public var decoration : FlxTypedGroup<Decoration>;
 
@@ -43,6 +44,8 @@ class PlayState extends GameState
 	// Game state variables
 	public var levelNotes : Int;
 	public var collectedNotes : Array<String>;
+	
+	public var paused : Bool;
 
     /**
 	 * Builds a new PlayState which will load the map file specified by name
@@ -53,7 +56,7 @@ class PlayState extends GameState
         super( );
 
         if ( Level == null )
-            Level = "" + GameStatus.currentLevel;
+            Level = GameStatus.currentLevelName;
 
         mapName = Level;
     }
@@ -75,6 +78,7 @@ class PlayState extends GameState
         ladders = new FlxGroup();
         enemies = new FlxGroup();
         springs = new FlxGroup();
+		footzones = new FlxGroup();
         collectibles = new FlxTypedGroup<Collectible>();
         decoration = new FlxTypedGroup<Decoration>();
 		
@@ -97,9 +101,10 @@ class PlayState extends GameState
         // Load level objects
         level.loadObjects( this );
 
-        add( enemies );
-        add( oneways );
-        add( collectibles );
+		add(footzones);
+        add(enemies);
+        add(oneways);
+        add(collectibles);
         add(springs);
 
         // Add overlay tiles
@@ -153,7 +158,7 @@ class PlayState extends GameState
     {
         if ( GamePad.justReleased( GamePad.Start ) )
         {
-            openSubState( new PauseMenu() );
+			openSubState(new PauseMenu(this));
         }
 
         // Enemies vs World
@@ -196,6 +201,34 @@ class PlayState extends GameState
     }
 
 	/* Collision and Handlers */
+	
+	public function onPause()
+	{
+		paused = true;
+		enemies.callAll("onPause");
+	}
+	
+	public function onUnpause()
+	{
+		paused = false;
+	}
+	
+	public function onNotePlayed(x : Float, y : Float)
+	{
+		// Handle the playing of a note from the player
+		// Make the appropriate mask and collision check with it
+		var maskWidth : Int = 64;
+		var maskHeight : Int = 64;
+		var notemask : FlxObject = new FlxObject(x - maskWidth / 2, y - maskHeight / 2, maskWidth, maskHeight);
+		notemask.update();
+		FlxG.overlap(enemies, notemask, onEnemyListenedMusic);
+		notemask.destroy();
+	}
+	
+	function onEnemyListenedMusic(enemy : Enemy, musicMask : FlxObject)
+	{
+		enemy.onNoteHeard(musicMask);
+	}
 	
     function resolveGroupWorldCollision( group : FlxGroup ) : Void
     {
@@ -301,20 +334,12 @@ class PlayState extends GameState
         #if (!mobile)
         if ( FlxG.mouse.justPressed )
         {
-			var enemy : EnemyBurstFly = new EnemyBurstFly(mousePos.x, mousePos.y, this);
-			enemy.init(16, 16, "enemy_butterfly_sheet");
-			enemies.add(enemy);
         }
         #end
 
-		if (FlxG.keys.pressed.N)
+		if (GameDebug.Cheat("UUDDRRT"))
 		{
 			GameController.NextLevel();
 		}
-		
-        if ( FlxG.keys.pressed.O )
-        {
-            TextBox.Message( "NPC", "Are you here to steal our animals?" );
-        }
     }
 }
