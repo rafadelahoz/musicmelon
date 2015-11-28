@@ -14,7 +14,7 @@ class Player extends Entity
 {
     /* Constants */
     public var HSpeed : Float = 60;
-    public var JumpSpeed : Float = 185;
+    public var JumpSpeed : Float = 200;
 	public var PlayTime : Float = 0.5;
 
     /* State variables */

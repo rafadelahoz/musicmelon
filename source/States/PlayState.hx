@@ -114,7 +114,7 @@ class PlayState extends GameState
         add( level.overlayTiles );
 
         // Set the camera to follow the player
-        FlxG.camera.follow( player, FlxCamera.STYLE_TOPDOWN, null, 0 );
+        FlxG.camera.follow( player, FlxCamera.STYLE_TOPDOWN_TIGHT, null, 0 );
 		
 		// Add the frame at the top of the scene
 		add(frame);
