@@ -90,7 +90,7 @@ class MetaGamePad extends Sprite
 		
 		for (button in buttons)
 		{
-			button.pressed = false;
+			// button.pressed = false;
 			currentPadState.set(button.id, button.isPressed(touchPoints));
 		}
 		

@@ -8,6 +8,10 @@ import openfl.geom.Rectangle;
 
 import flixel.util.FlxColorUtil;
 
+#if mobile
+import Hardware;
+#end
+
 class GamePadButton extends Sprite
 {
 	public var id : Int;
@@ -80,6 +84,8 @@ class GamePadButton extends Sprite
 	
 	public function isPressed(touches : Map<Int, Point>) : Bool
 	{
+		var wasPressed : Bool = pressed;
+
 		pressed = false;
 		
 		for (point in touches.iterator())
@@ -87,6 +93,12 @@ class GamePadButton extends Sprite
 			if (bounds.contains(point.x, point.y))
 			{
 				pressed = true;
+
+				#if mobile
+				if (!wasPressed)
+					Hardware.vibrate(50);
+				#end
+
 				break;
 			}
 		}

@@ -187,12 +187,12 @@ class Player extends Entity
 
 				if (!onAir && !climbing && GamePad.justPressed(GamePad.B))
 				{
-						playNote();
-						
-						playing = true;
-						instrument.revive();
-						timer.start(PlayTime, onPlayingEnd);
-					// }
+						if (playNote())
+                        {
+    						playing = true;
+    						instrument.revive();
+    						timer.start(PlayTime, onPlayingEnd);
+                        }
 				}
 					
 				handleJump();
@@ -211,20 +211,24 @@ class Player extends Entity
 		handleInstrument();
     }
 
-	public function playNote() 
+	public function playNote() : Bool
 	{
 		if (world.collectedNotes.length > 0)
 		{
 			FlxG.sound.play(FlxRandom.getObject(world.collectedNotes));
+
+            var xx : Float = getMidpoint().x + (flipX ? - instrument.width : 0);
+            var yy : Float = y - 2;
+            
+            var note : FxPlayedNote = new FxPlayedNote(xx, yy, facing);
+            world.add(note);
+            
+            world.onNotePlayed(getMidpoint().x, getMidpoint().y);
+
+            return true;
 		}
-		
-		var xx : Float = getMidpoint().x + (flipX ? - instrument.width : 0);
-		var yy : Float = y - 2;
-		
-		var note : FxPlayedNote = new FxPlayedNote(xx, yy, facing);
-		world.add(note);
-		
-		world.onNotePlayed(getMidpoint().x, getMidpoint().y);
+
+        return false;
 	}
 	
 	public function onPlayingEnd(t:FlxTimer) {
