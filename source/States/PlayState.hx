@@ -31,6 +31,7 @@ class PlayState extends GameState
     public var springs : FlxGroup;
     public var oneways : FlxGroup;
     public var ladders : FlxGroup;
+    public var movingPlatforms : FlxGroup;
     public var enemies : FlxGroup;
 	public var footzones : FlxGroup;
     public var collectibles : FlxTypedGroup<Collectible>;
@@ -81,6 +82,7 @@ class PlayState extends GameState
         ladders = new FlxGroup();
         enemies = new FlxGroup();
         springs = new FlxGroup();
+        movingPlatforms = new FlxGroup();
 		footzones = new FlxGroup();
         collectibles = new FlxTypedGroup<Collectible>();
         decoration = new FlxTypedGroup<Decoration>();
@@ -109,6 +111,7 @@ class PlayState extends GameState
         add(oneways);
         add(collectibles);
         add(springs);
+        add(movingPlatforms);
 
         // Add overlay tiles
         add( level.overlayTiles );
@@ -150,6 +153,9 @@ class PlayState extends GameState
         springs.destroy();
         springs = null;
 
+        movingPlatforms.destroy();
+        movingPlatforms = null;
+
         super.destroy( );
     }
 
@@ -175,6 +181,9 @@ class PlayState extends GameState
 
         // Player vs One way solids
         FlxG.collide( oneways, player );
+
+        // Player vs Platforms
+        FlxG.collide ( movingPlatforms, player );
 
         // Player vs Springs
         FlxG.overlap( springs, player, onSpringCollision );

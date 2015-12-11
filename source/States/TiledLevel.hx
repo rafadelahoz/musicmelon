@@ -149,6 +149,11 @@ class TiledLevel extends TiledMap
                         state.addNote(musicnote);
                 }
 
+            /** Moving Platforms **/
+            case "movingplatform":
+                var movingPlatform : MovingPlatform = MovingPlatformBuilder.build(o.width, o.height, g, o, x, y, state);
+                state.movingPlatforms.add(movingPlatform);
+
             /** Elements **/
             /*	case "decoration":
 				var gid = o.gid;
