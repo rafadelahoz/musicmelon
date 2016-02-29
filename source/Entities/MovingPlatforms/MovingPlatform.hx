@@ -26,7 +26,7 @@ class MovingPlatform extends Entity
             makeGraphic( Width, Height, 0xFFEB3BB7 );
         else
             // Load the specified spritesheet with the given width and height
-            loadGraphic( "assets/images/" + Sprite + ".png", true, Width, Height );
+            loadGraphic( "assets/images/" + Sprite + ".png");
 
         fps = Fps;
         speed = Speed;
